@@ -1,0 +1,3 @@
+DROP TABLE IF EXISTS `PREFIX_tec_gsc_alerts`;
+DROP TABLE IF EXISTS `PREFIX_tec_gsc_data`;
+DROP TABLE IF EXISTS `PREFIX_tec_gsc_config`;

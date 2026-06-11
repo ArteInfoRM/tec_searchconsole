@@ -1,0 +1,41 @@
+# Changelog
+
+All notable changes to this project are documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project follows semantic versioning.
+
+## [Unreleased]
+
+## [1.0.0] - 2026-06-11
+
+### Added
+
+- Initial Google Search Console OAuth 2.0 connection.
+- Google API Client dependencies bundled under `lib/google_vendor/`.
+- Search Console configuration page with client ID, masked client secret, property URL, connection status, callback URL, and cron URL.
+- Separate Google site verification panel with dedicated save action.
+- `displayHeader` integration for the Google site verification meta tag.
+- Search Console dashboard with last 28 complete days metrics.
+- Live KPI cards for clicks, impressions, average CTR, and average position.
+- Top pages and top queries ordered by clicks.
+- Submitted sitemap list from Search Console.
+- Manual synchronization action.
+- Cron endpoint with token validation.
+- `dashboardZoneTwo` widget for the native PrestaShop back-office dashboard.
+- Dashboard widget top queries and submitted sitemap summary.
+- Product edit SEO widget through `displayAdminProductsExtra`.
+- Product keyword breakdown by Search Console query.
+- Local database tables for configuration, Search Console data, and alerts.
+- Safe OAuth callback handling with back-office return URL persistence.
+
+### Fixed
+
+- Prevented the module menu tab from being installed as a child of `AdminStats`, keeping the native PrestaShop statistics page clickable.
+- Avoided PrestaShop autoload conflicts by using the private `lib/google_vendor/` dependency directory.
+- Fixed OAuth callback redirects that could return to an invalid module URL with `gsc_error=csrf`.
+- Aligned dashboard metrics with Google Search Console's last 28 complete days range.
+
+### Changed
+
+- Search Console dashboard and dashboard widget now use live API data when the account is connected.
+- Stored client secrets are masked in the back office and preserved when the submitted value is unchanged.

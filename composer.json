@@ -1,0 +1,20 @@
+{
+  "name": "tecnoacquisti/tec_searchconsole",
+  "description": "PrestaShop module: Google Search Console integration",
+  "type": "prestashop-module",
+  "license": "AFL-3.0",
+  "require": {
+    "php": ">=8.1",
+    "google/apiclient": "^2.15",
+    "monolog/monolog": "^2.9"
+  },
+  "config": {
+    "vendor-dir": "lib/google_vendor",
+    "optimize-autoloader": true
+  },
+  "autoload": {
+    "psr-4": {
+      "Tecnoacquisti\\SearchConsole\\": "classes/"
+    }
+  }
+}

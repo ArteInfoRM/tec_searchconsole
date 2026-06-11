@@ -1,0 +1,11 @@
+*.log
+*.zip
+/dist/
+/var/
+/cache/
+/tmp/
+/documentation/tec_searchconsole_specs.md
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

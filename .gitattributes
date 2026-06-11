@@ -1,0 +1,19 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+*.zip binary
+
+.gitignore export-ignore
+.gitattributes export-ignore
+.editorconfig export-ignore
+/documentation/ export-ignore
+/documentation/tec_searchconsole_specs.md export-ignore
+/tests/ export-ignore
+/.github/ export-ignore
+/dist/ export-ignore
+/config*.xml export-ignore
