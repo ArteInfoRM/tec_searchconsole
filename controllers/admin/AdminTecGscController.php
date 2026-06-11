@@ -109,12 +109,6 @@ class AdminTecGscController extends ModuleAdminController
      */
     private function saveConfig()
     {
-        if (!$this->token || Tools::getValue('token') !== $this->token) {
-            $this->errors[] = $this->trans('Invalid security token.', [], 'Admin.Notifications.Error');
-
-            return;
-        }
-
         $clientId = trim((string) Tools::getValue('client_id'));
         $clientSecret = trim((string) Tools::getValue('client_secret'));
         $siteUrl = trim((string) Tools::getValue('site_url'));
@@ -142,12 +136,6 @@ class AdminTecGscController extends ModuleAdminController
      */
     private function saveVerificationTag()
     {
-        if (!$this->token || Tools::getValue('token') !== $this->token) {
-            $this->errors[] = $this->trans('Invalid security token.', [], 'Admin.Notifications.Error');
-
-            return;
-        }
-
         $submittedTag = trim((string) Tools::getValue('verification_tag'));
         $verificationToken = $this->extractVerificationToken($submittedTag);
         if ($submittedTag !== '' && $verificationToken === '') {

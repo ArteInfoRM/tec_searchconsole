@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed back-office form submissions on PrestaShop 9 by relying on the native admin action token.
+- Fixed direct access to OAuth callback and cron endpoints under the PrestaShop 9 modules directory rules.
+
 ## [1.0.1] - 2026-06-11
 
 ### Changed

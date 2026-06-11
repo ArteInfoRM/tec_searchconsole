@@ -9,7 +9,6 @@
 *}
 
 <form method="post" action="{$gsc_form_action|escape:'html':'UTF-8'}" class="form-horizontal tec-gsc-config-form">
-  <input type="hidden" name="token" value="{$token|escape:'html':'UTF-8'}">
   <div class="panel tec-gsc-dashboard">
     <div class="panel-heading">
       <i class="icon-search"></i> {l s='Search Console SEO' mod='tec_searchconsole'}
@@ -85,7 +84,6 @@
 </form>
 
 <form method="post" action="{$gsc_form_action|escape:'html':'UTF-8'}" class="form-horizontal tec-gsc-verification-form">
-  <input type="hidden" name="token" value="{$token|escape:'html':'UTF-8'}">
   <div class="panel tec-gsc-verification">
     <div class="panel-heading">
       <i class="icon-check"></i> {l s='Search Console verification' mod='tec_searchconsole'}
