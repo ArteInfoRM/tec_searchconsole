@@ -103,7 +103,7 @@ class Tec_searchconsole extends Module
 
         $idShop = (int) $this->context->shop->id;
         $idLang = (int) $this->context->language->id;
-        $linker = new GscProductLinker($idShop, $idLang);
+        $linker = new GscProductLinker($idShop, $idLang, $this->context->link);
 
         $this->context->smarty->assign([
             'gsc_seo_data' => $linker->getProductSeoData($idProduct, 30),

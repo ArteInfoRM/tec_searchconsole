@@ -24,7 +24,7 @@ if ($module && method_exists($module, 'loadModuleAutoloader')) {
     $module->loadModuleAutoloader();
 }
 
-$context = Context::getContext();
+$context = isset($module->context) ? $module->context : null;
 $idShop = isset($context->shop->id) ? (int) $context->shop->id : 1;
 $state = (string) Tools::getValue('state');
 $code = (string) Tools::getValue('code');
@@ -34,7 +34,7 @@ if ($matchedShopId > 0) {
 }
 $adminUrl = (string) Configuration::get('TEC_GSC_ADMIN_RETURN_URL_' . (int) $idShop);
 if ($adminUrl === '') {
-    $adminUrl = $context->link->getAdminLink('AdminTecGsc');
+    $adminUrl = isset($context->link) ? $context->link->getAdminLink('AdminTecGsc') : '';
 }
 
 if ($matchedShopId <= 0) {

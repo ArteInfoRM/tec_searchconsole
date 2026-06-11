@@ -11,8 +11,8 @@
 
 namespace Tecnoacquisti\SearchConsole;
 
-use Context;
 use Db;
+use Link;
 use Product;
 
 if (!defined('_PS_VERSION_')) {
@@ -35,13 +35,20 @@ class GscProductLinker
     private $idLang;
 
     /**
+     * @var Link URL builder
+     */
+    private $link;
+
+    /**
      * @param int $idShop Shop identifier
      * @param int $idLang Language identifier
+     * @param Link $link URL builder
      */
-    public function __construct(int $idShop, int $idLang)
+    public function __construct(int $idShop, int $idLang, Link $link)
     {
         $this->idShop = $idShop;
         $this->idLang = $idLang;
+        $this->link = $link;
     }
 
     /**
@@ -133,7 +140,7 @@ class GscProductLinker
             return '';
         }
 
-        $pageUrl = Context::getContext()->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
+        $pageUrl = $this->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
         $path = parse_url($pageUrl, PHP_URL_PATH);
 
         return is_string($path) ? rtrim($path, '/') : '';

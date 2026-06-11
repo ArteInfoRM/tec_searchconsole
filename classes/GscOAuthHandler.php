@@ -12,7 +12,6 @@
 namespace Tecnoacquisti\SearchConsole;
 
 use Configuration;
-use Context;
 use Exception;
 use Google\Client;
 use PrestaShopLogger;

@@ -24,7 +24,6 @@ return array(
     'Google\\Auth\\AccessToken' => $vendorDir . '/google/auth/src/AccessToken.php',
     'Google\\Auth\\ApplicationDefaultCredentials' => $vendorDir . '/google/auth/src/ApplicationDefaultCredentials.php',
     'Google\\Auth\\CacheTrait' => $vendorDir . '/google/auth/src/CacheTrait.php',
-    'Google\\Auth\\Cache\\FileSystemCacheItemPool' => $vendorDir . '/google/auth/src/Cache/FileSystemCacheItemPool.php',
     'Google\\Auth\\Cache\\InvalidArgumentException' => $vendorDir . '/google/auth/src/Cache/InvalidArgumentException.php',
     'Google\\Auth\\Cache\\MemoryCacheItemPool' => $vendorDir . '/google/auth/src/Cache/MemoryCacheItemPool.php',
     'Google\\Auth\\Cache\\SysVCacheItemPool' => $vendorDir . '/google/auth/src/Cache/SysVCacheItemPool.php',
