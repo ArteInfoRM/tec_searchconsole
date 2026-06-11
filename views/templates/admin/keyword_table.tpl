@@ -1,13 +1,11 @@
 {*
-* 2009-2026 Arte e Informatica
+* 2009-2026 Tecnoacquisti.com
 *
-* NOTICE OF LICENSE
+* For support feel free to contact us on our website at https://www.tecnoacquisti.com
 *
-* This source file is subject to a commercial license.
-*
-* @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
-* @copyright 2009-2026 Arte e Informatica
-* @license   Commercial license
+* @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+* @copyright 2009-2026 Tecnoacquisti.com
+* @license   https://opensource.org/licenses/MIT MIT License
 *}
 
 <div class="panel tec-gsc-table">
@@ -31,7 +29,7 @@
             <td class="tec-gsc-url">{$row[$first_column]|escape:'html':'UTF-8'}</td>
             <td>{$row.clicks|default:0|intval}</td>
             <td>{$row.impressions|default:0|intval}</td>
-            <td>{$row.position|default:0|string_format:'%.2f'}</td>
+            <td>{math equation='x' x=$row.position|default:0 format='%.2f'}</td>
             {if isset($row.ctr)}
               <td>{math equation='x * 100' x=$row.ctr format='%.2f'}%</td>
             {/if}

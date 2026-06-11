@@ -1,13 +1,11 @@
 {*
-* 2009-2026 Arte e Informatica
+* 2009-2026 Tecnoacquisti.com
 *
-* NOTICE OF LICENSE
+* For support feel free to contact us on our website at https://www.tecnoacquisti.com
 *
-* This source file is subject to a commercial license.
-*
-* @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
-* @copyright 2009-2026 Arte e Informatica
-* @license   Commercial license
+* @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+* @copyright 2009-2026 Tecnoacquisti.com
+* @license   https://opensource.org/licenses/MIT MIT License
 *}
 
 <div class="panel">
@@ -27,7 +25,7 @@
     </div>
     <div class="col-md-3">
       <strong>{l s='Position' mod='tec_searchconsole'}</strong><br>
-      {$gsc_seo_data.avg_position|default:0|string_format:'%.2f'}
+      {math equation='x' x=$gsc_seo_data.avg_position|default:0 format='%.2f'}
     </div>
   </div>
 
@@ -51,7 +49,7 @@
             <td>{$row.clicks|default:0|intval}</td>
             <td>{$row.impressions|default:0|intval}</td>
             <td>{math equation='x * 100' x=$row.ctr|default:0 format='%.2f'}%</td>
-            <td>{$row.position|default:0|string_format:'%.2f'}</td>
+            <td>{math equation='x' x=$row.position|default:0 format='%.2f'}</td>
           </tr>
         {/foreach}
       </tbody>

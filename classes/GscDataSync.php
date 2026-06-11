@@ -1,22 +1,22 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
 use Db;
 use DateTime;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Synchronizes Search Console data into local storage.
@@ -59,7 +59,7 @@ class GscDataSync
         $rows = $this->apiClient->getAllSearchAnalytics(
             $startDate,
             $endDate,
-            array('query', 'page', 'device', 'country', 'date')
+            ['query', 'page', 'device', 'country', 'date']
         );
 
         $processedRows = $this->upsertRows($rows);
@@ -91,7 +91,7 @@ class GscDataSync
             $rows = $this->apiClient->getAllSearchAnalytics(
                 $chunkStart,
                 $chunkEnd,
-                array('query', 'page', 'device', 'country', 'date')
+                ['query', 'page', 'device', 'country', 'date']
             );
             $processedRows += $this->upsertRows($rows);
             sleep(1);
@@ -120,7 +120,7 @@ class GscDataSync
 
             $keys = $row->getKeys();
             if (!is_array($keys)) {
-                $keys = array();
+                $keys = [];
             }
 
             $query = $this->truncate((string) ($keys[0] ?? ''), 499);
@@ -174,7 +174,7 @@ class GscDataSync
     private function normalizeDevice(string $device): string
     {
         $device = strtoupper($device);
-        $allowedDevices = array('DESKTOP', 'MOBILE', 'TABLET', 'ALL');
+        $allowedDevices = ['DESKTOP', 'MOBILE', 'TABLET', 'ALL'];
 
         return in_array($device, $allowedDevices, true) ? $device : 'ALL';
     }

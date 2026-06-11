@@ -1,13 +1,11 @@
 {*
-* 2009-2026 Arte e Informatica
+* 2009-2026 Tecnoacquisti.com
 *
-* NOTICE OF LICENSE
+* For support feel free to contact us on our website at https://www.tecnoacquisti.com
 *
-* This source file is subject to a commercial license.
-*
-* @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
-* @copyright 2009-2026 Arte e Informatica
-* @license   Commercial license
+* @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+* @copyright 2009-2026 Tecnoacquisti.com
+* @license   https://opensource.org/licenses/MIT MIT License
 *}
 
 <div class="panel tec-dashboard-widget tec-gsc-dashboard-widget">
@@ -44,7 +42,7 @@
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <div class="tec-gsc-widget-kpi">
-            <span class="tec-gsc-widget-number">{$tec_gsc_metrics.position|default:0|string_format:'%.2f'}</span>
+            <span class="tec-gsc-widget-number">{math equation='x' x=$tec_gsc_metrics.position|default:0 format='%.2f'}</span>
             <span class="tec-gsc-widget-label">{l s='Average position' mod='tec_searchconsole'}</span>
           </div>
         </div>

@@ -1,14 +1,12 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  * @version   1.0.1
  */
 
@@ -16,8 +14,8 @@ if (!defined('_PS_VERSION_')) {
     exit;
 }
 
-use Tecnoacquisti\SearchConsole\GscConfigRepository;
 use Tecnoacquisti\SearchConsole\GscApiClient;
+use Tecnoacquisti\SearchConsole\GscConfigRepository;
 use Tecnoacquisti\SearchConsole\GscOAuthHandler;
 use Tecnoacquisti\SearchConsole\GscProductLinker;
 
@@ -37,7 +35,7 @@ class Tec_searchconsole extends Module
         $this->author = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
-        $this->ps_versions_compliancy = array('min' => '8.0.0', 'max' => '9.99.99');
+        $this->ps_versions_compliancy = ['min' => '8.0.0', 'max' => '9.99.99'];
 
         $this->loadModuleAutoloader();
 
@@ -107,10 +105,10 @@ class Tec_searchconsole extends Module
         $idLang = (int) $this->context->language->id;
         $linker = new GscProductLinker($idShop, $idLang);
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'gsc_seo_data' => $linker->getProductSeoData($idProduct, 30),
             'gsc_top_keys' => $linker->getProductTopKeywords($idProduct, 10, 30),
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/admin/product_seo.tpl');
     }
@@ -129,7 +127,7 @@ class Tec_searchconsole extends Module
         $controllerName = isset($this->context->controller->controller_name)
             ? (string) $this->context->controller->controller_name
             : (string) Tools::getValue('controller');
-        if (!in_array($controllerName, array('AdminTecGsc', 'AdminDashboard'), true)) {
+        if (!in_array($controllerName, ['AdminTecGsc', 'AdminDashboard'], true)) {
             return;
         }
 
@@ -152,9 +150,9 @@ class Tec_searchconsole extends Module
             return '';
         }
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'gsc_verification_token' => $token,
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/search_console_verification.tpl');
     }
@@ -170,14 +168,14 @@ class Tec_searchconsole extends Module
     {
         $idShop = isset($this->context->shop->id) ? (int) $this->context->shop->id : 1;
         $config = $this->getSearchConsoleConfig($idShop);
-        $metrics = array(
+        $metrics = [
             'clicks' => 0,
             'impressions' => 0,
             'ctr' => 0,
             'position' => 0,
-        );
-        $sitemaps = array();
-        $topQueries = array();
+        ];
+        $sitemaps = [];
+        $topQueries = [];
 
         $apiClient = $this->getSearchConsoleApiClient($idShop, $config);
         if ($apiClient instanceof GscApiClient) {
@@ -188,14 +186,14 @@ class Tec_searchconsole extends Module
             $sitemaps = $apiClient->listSitemaps();
         }
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'tec_gsc_dashboard_url' => $this->context->link->getAdminLink('AdminTecGsc'),
             'tec_gsc_is_connected' => !empty($config['is_connected']),
             'tec_gsc_metrics' => $metrics,
             'tec_gsc_top_queries' => $topQueries,
             'tec_gsc_sitemaps' => array_slice($sitemaps, 0, 5),
             'tec_gsc_sitemap_count' => count($sitemaps),
-        ));
+        ]);
 
         return $this->display(__FILE__, 'views/templates/hook/dashboard.tpl');
     }
@@ -281,7 +279,7 @@ class Tec_searchconsole extends Module
         $idParent = $this->getStatsSiblingParentId();
 
         $tab = new Tab();
-        $tab->active = 1;
+        $tab->active = true;
         $tab->class_name = 'AdminTecGsc';
         $tab->module = $this->name;
         $tab->id_parent = $idParent;
@@ -394,7 +392,7 @@ class Tec_searchconsole extends Module
             WHERE id_shop = ' . (int) $idShop
         );
 
-        return is_array($row) ? $row : array();
+        return is_array($row) ? $row : [];
     }
 
     /**

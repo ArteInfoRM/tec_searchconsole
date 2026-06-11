@@ -1,23 +1,23 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
 use Configuration;
 use Db;
 use Shop;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Reads and writes Google Search Console module configuration.
@@ -49,7 +49,7 @@ class GscConfigRepository
             WHERE id_shop = ' . (int) $idShop
         );
 
-        return is_array($createdRow) ? $createdRow : array();
+        return is_array($createdRow) ? $createdRow : [];
     }
 
     /**
@@ -70,12 +70,12 @@ class GscConfigRepository
             ? $storedSecret
             : $clientSecret;
 
-        Db::getInstance()->update('tec_gsc_config', array(
+        Db::getInstance()->update('tec_gsc_config', [
             'client_id' => pSQL($clientId),
             'client_secret' => pSQL($secretToStore),
             'site_url' => pSQL($siteUrl),
             'date_upd' => date('Y-m-d H:i:s'),
-        ), 'id_shop = ' . (int) $idShop);
+        ], 'id_shop = ' . (int) $idShop);
     }
 
     /**
@@ -96,13 +96,13 @@ class GscConfigRepository
             ? $refreshToken
             : $cipher->decrypt(isset($config['refresh_token']) ? (string) $config['refresh_token'] : '');
 
-        Db::getInstance()->update('tec_gsc_config', array(
+        Db::getInstance()->update('tec_gsc_config', [
             'access_token' => pSQL($cipher->encrypt($accessToken)),
             'refresh_token' => pSQL($cipher->encrypt($refreshTokenToStore)),
             'token_expires' => (int) $expiresAt,
             'is_connected' => 1,
             'date_upd' => date('Y-m-d H:i:s'),
-        ), 'id_shop = ' . (int) $idShop);
+        ], 'id_shop = ' . (int) $idShop);
     }
 
     /**
@@ -114,13 +114,13 @@ class GscConfigRepository
      */
     public function clearTokens(int $idShop): void
     {
-        Db::getInstance()->update('tec_gsc_config', array(
+        Db::getInstance()->update('tec_gsc_config', [
             'access_token' => '',
             'refresh_token' => '',
             'token_expires' => 0,
             'is_connected' => 0,
             'date_upd' => date('Y-m-d H:i:s'),
-        ), 'id_shop = ' . (int) $idShop);
+        ], 'id_shop = ' . (int) $idShop);
     }
 
     /**
@@ -132,10 +132,10 @@ class GscConfigRepository
      */
     public function updateLastSync(int $idShop): void
     {
-        Db::getInstance()->update('tec_gsc_config', array(
+        Db::getInstance()->update('tec_gsc_config', [
             'last_sync' => date('Y-m-d H:i:s'),
             'date_upd' => date('Y-m-d H:i:s'),
-        ), 'id_shop = ' . (int) $idShop);
+        ], 'id_shop = ' . (int) $idShop);
     }
 
     /**
@@ -170,7 +170,7 @@ class GscConfigRepository
             return;
         }
 
-        Db::getInstance()->insert('tec_gsc_config', array(
+        Db::getInstance()->insert('tec_gsc_config', [
             'id_shop' => (int) $idShop,
             'client_id' => '',
             'client_secret' => '',
@@ -181,7 +181,7 @@ class GscConfigRepository
             'is_connected' => 0,
             'date_add' => date('Y-m-d H:i:s'),
             'date_upd' => date('Y-m-d H:i:s'),
-        ));
+        ]);
     }
 
     /**

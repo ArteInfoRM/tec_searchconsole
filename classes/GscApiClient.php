@@ -1,17 +1,13 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
@@ -20,6 +16,10 @@ use Google\Client;
 use Google\Service\Webmasters;
 use Google\Service\Webmasters\SearchAnalyticsQueryRequest;
 use PrestaShopLogger;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Wraps the Google Search Console API.
@@ -68,7 +68,7 @@ class GscApiClient
     public function getSearchAnalytics(
         string $startDate,
         string $endDate,
-        array $dimensions = array('query', 'page'),
+        array $dimensions = ['query', 'page'],
         int $rowLimit = 5000,
         int $startRow = 0
     ): array {
@@ -83,11 +83,11 @@ class GscApiClient
             $response = $this->service->searchanalytics->query($this->siteUrl, $request);
             $rows = $response->getRows();
 
-            return is_array($rows) ? $rows : array();
+            return is_array($rows) ? $rows : [];
         } catch (Exception $exception) {
             PrestaShopLogger::addLog('GSC API error: ' . $exception->getMessage(), 3);
 
-            return array();
+            return [];
         }
     }
 
@@ -103,9 +103,9 @@ class GscApiClient
     public function getAllSearchAnalytics(
         string $startDate,
         string $endDate,
-        array $dimensions = array('query', 'page', 'date')
+        array $dimensions = ['query', 'page', 'date']
     ): array {
-        $allRows = array();
+        $allRows = [];
         $startRow = 0;
         $pageSize = 25000;
 
@@ -128,7 +128,7 @@ class GscApiClient
      */
     public function getDailyTotals(string $startDate, string $endDate): array
     {
-        $rows = $this->getSearchAnalytics($startDate, $endDate, array('date'), 25000, 0);
+        $rows = $this->getSearchAnalytics($startDate, $endDate, ['date'], 25000, 0);
         $clicks = 0;
         $impressions = 0;
         $weightedPosition = 0.0;
@@ -146,12 +146,12 @@ class GscApiClient
             $weightedPosition += $rowPosition * $rowImpressions;
         }
 
-        return array(
+        return [
             'clicks' => $clicks,
             'impressions' => $impressions,
             'ctr' => $impressions > 0 ? $clicks / $impressions : 0.0,
             'position' => $impressions > 0 ? $weightedPosition / $impressions : 0.0,
-        );
+        ];
     }
 
     /**
@@ -194,12 +194,12 @@ class GscApiClient
      */
     private function getTopDimensionRows(string $dimension, string $startDate, string $endDate, int $limit): array
     {
-        if (!in_array($dimension, array('page', 'query'), true)) {
-            return array();
+        if (!in_array($dimension, ['page', 'query'], true)) {
+            return [];
         }
 
-        $rows = $this->getSearchAnalytics($startDate, $endDate, array($dimension), max(1, min(100, $limit)), 0);
-        $dimensionRows = array();
+        $rows = $this->getSearchAnalytics($startDate, $endDate, [$dimension], max(1, min(100, $limit)), 0);
+        $dimensionRows = [];
 
         foreach ($rows as $row) {
             if (!is_object($row) || !method_exists($row, 'getKeys')) {
@@ -209,13 +209,13 @@ class GscApiClient
             $keys = $row->getKeys();
             $clicks = method_exists($row, 'getClicks') ? (int) $row->getClicks() : 0;
             $impressions = method_exists($row, 'getImpressions') ? (int) $row->getImpressions() : 0;
-            $dimensionRows[] = array(
+            $dimensionRows[] = [
                 $dimension => isset($keys[0]) ? (string) $keys[0] : '',
                 'clicks' => $clicks,
                 'impressions' => $impressions,
                 'ctr' => $impressions > 0 ? $clicks / $impressions : 0.0,
                 'position' => method_exists($row, 'getPosition') ? (float) $row->getPosition() : 0.0,
-            );
+            ];
         }
 
         usort($dimensionRows, function (array $left, array $right) {
@@ -236,11 +236,11 @@ class GscApiClient
             $response = $this->service->sites->listSites();
             $entries = $response->getSiteEntry();
 
-            return is_array($entries) ? $entries : array();
+            return is_array($entries) ? $entries : [];
         } catch (Exception $exception) {
             PrestaShopLogger::addLog('GSC sites list error: ' . $exception->getMessage(), 2);
 
-            return array();
+            return [];
         }
     }
 
@@ -257,20 +257,20 @@ class GscApiClient
         } catch (Exception $exception) {
             PrestaShopLogger::addLog('GSC sitemaps list error: ' . $exception->getMessage(), 2);
 
-            return array();
+            return [];
         }
 
         if (!is_array($sitemaps)) {
-            return array();
+            return [];
         }
 
-        $rows = array();
+        $rows = [];
         foreach ($sitemaps as $sitemap) {
             if (!is_object($sitemap)) {
                 continue;
             }
 
-            $rows[] = array(
+            $rows[] = [
                 'path' => method_exists($sitemap, 'getPath') ? (string) $sitemap->getPath() : '',
                 'type' => method_exists($sitemap, 'getType') ? (string) $sitemap->getType() : '',
                 'is_pending' => method_exists($sitemap, 'getIsPending') ? (bool) $sitemap->getIsPending() : false,
@@ -280,7 +280,7 @@ class GscApiClient
                 'warnings' => method_exists($sitemap, 'getWarnings') ? (int) $sitemap->getWarnings() : 0,
                 'errors' => method_exists($sitemap, 'getErrors') ? (int) $sitemap->getErrors() : 0,
                 'submitted_urls' => $this->getSubmittedUrlCount($sitemap),
-            );
+            ];
         }
 
         return $rows;

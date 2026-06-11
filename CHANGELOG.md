@@ -13,6 +13,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Trimmed bundled Google API service classes to the Search Console/Webmasters service used by the module.
 - Regenerated the optimized Composer autoloader after vendor trimming.
 - Reduced the release archive size while keeping the module installable without Composer.
+- Switched module license metadata and headers to MIT.
+- Configured Composer autoload as non-prepending for PrestaShop compatibility.
+- Added PrestaShop context guards to module-owned PHP files reported by the validator.
+- Added directory index files under the bundled library tree.
+- Replaced Smarty `string_format` usage in module templates with validator-friendly formatting.
 
 ## [1.0.0] - 2026-06-11
 

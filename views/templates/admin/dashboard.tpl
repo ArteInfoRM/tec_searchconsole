@@ -1,13 +1,11 @@
 {*
-* 2009-2026 Arte e Informatica
+* 2009-2026 Tecnoacquisti.com
 *
-* NOTICE OF LICENSE
+* For support feel free to contact us on our website at https://www.tecnoacquisti.com
 *
-* This source file is subject to a commercial license.
-*
-* @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
-* @copyright 2009-2026 Arte e Informatica
-* @license   Commercial license
+* @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+* @copyright 2009-2026 Tecnoacquisti.com
+* @license   https://opensource.org/licenses/MIT MIT License
 *}
 
 <form method="post" action="{$gsc_form_action|escape:'html':'UTF-8'}" class="form-horizontal tec-gsc-config-form">
@@ -134,7 +132,7 @@
   <div class="col-lg-3 col-md-6">
     <div class="panel">
       <div class="panel-heading">{l s='Average position' mod='tec_searchconsole'}</div>
-      <div class="tec-gsc-kpi">{$gsc_stats.last_28_days.position|default:0|string_format:'%.2f'}</div>
+      <div class="tec-gsc-kpi">{math equation='x' x=$gsc_stats.last_28_days.position|default:0 format='%.2f'}</div>
     </div>
   </div>
 </div>
@@ -222,7 +220,7 @@
               <tr>
                 <td>{$alert.alert_type|escape:'html':'UTF-8'}</td>
                 <td class="tec-gsc-url">{$alert.page|escape:'html':'UTF-8'}</td>
-                <td>{$alert.delta_pct|string_format:'%.2f'}%</td>
+                <td>{math equation='x' x=$alert.delta_pct|default:0 format='%.2f'}%</td>
                 <td>{$alert.date_add|escape:'html':'UTF-8'}</td>
               </tr>
             {/foreach}

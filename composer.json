@@ -2,7 +2,7 @@
   "name": "tecnoacquisti/tec_searchconsole",
   "description": "PrestaShop module: Google Search Console integration",
   "type": "prestashop-module",
-  "license": "AFL-3.0",
+  "license": "MIT",
   "require": {
     "php": ">=8.1",
     "google/apiclient": "^2.15",
@@ -10,7 +10,8 @@
   },
   "config": {
     "vendor-dir": "lib/google_vendor",
-    "optimize-autoloader": true
+    "optimize-autoloader": true,
+    "prepend-autoloader": false
   },
   "autoload": {
     "psr-4": {

@@ -1,15 +1,17 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Tecnoacquisti\SearchConsole\GscAlertEngine;
 use Tecnoacquisti\SearchConsole\GscApiClient;
@@ -31,7 +33,7 @@ class AdminTecGscController extends ModuleAdminController
         $this->meta_title = 'Search Console SEO';
         parent::__construct();
 
-        if ($this->module && method_exists($this->module, 'loadModuleAutoloader')) {
+        if (method_exists($this->module, 'loadModuleAutoloader')) {
             $this->module->loadModuleAutoloader();
         }
     }
@@ -81,7 +83,7 @@ class AdminTecGscController extends ModuleAdminController
         $cronToken = $repository->getCronToken();
         $baseUrl = Tools::getShopDomainSsl(true) . __PS_BASE_URI__;
 
-        $this->context->smarty->assign(array(
+        $this->context->smarty->assign([
             'gsc_config' => $this->getTemplateConfig($config, $repository),
             'gsc_stats' => $this->getDashboardStats($idShop, $config),
             'gsc_alerts' => $this->getUnreadAlerts($idShop),
@@ -94,7 +96,7 @@ class AdminTecGscController extends ModuleAdminController
             'gsc_disconnect_url' => $this->context->link->getAdminLink('AdminTecGsc') . '&disconnect_google=1',
             'gsc_sync_url' => $this->context->link->getAdminLink('AdminTecGsc') . '&sync_now=1',
             'gsc_vendor_ready' => is_file(_PS_MODULE_DIR_ . 'tec_searchconsole/lib/google_vendor/autoload.php'),
-        ));
+        ]);
 
         $this->content .= $this->context->smarty->fetch(_PS_MODULE_DIR_ . 'tec_searchconsole/views/templates/admin/dashboard.tpl');
         $this->context->smarty->assign('content', $this->content);
@@ -108,7 +110,7 @@ class AdminTecGscController extends ModuleAdminController
     private function saveConfig()
     {
         if (!$this->token || Tools::getValue('token') !== $this->token) {
-            $this->errors[] = $this->trans('Invalid security token.', array(), 'Admin.Notifications.Error');
+            $this->errors[] = $this->trans('Invalid security token.', [], 'Admin.Notifications.Error');
 
             return;
         }
@@ -141,7 +143,7 @@ class AdminTecGscController extends ModuleAdminController
     private function saveVerificationTag()
     {
         if (!$this->token || Tools::getValue('token') !== $this->token) {
-            $this->errors[] = $this->trans('Invalid security token.', array(), 'Admin.Notifications.Error');
+            $this->errors[] = $this->trans('Invalid security token.', [], 'Admin.Notifications.Error');
 
             return;
         }
@@ -161,7 +163,7 @@ class AdminTecGscController extends ModuleAdminController
             null,
             (int) $this->context->shop->id
         );
-        if ($this->module && method_exists($this->module, 'registerHook')) {
+        if (method_exists($this->module, 'registerHook')) {
             $this->module->registerHook('displayHeader');
         }
 
@@ -241,13 +243,13 @@ class AdminTecGscController extends ModuleAdminController
      */
     private function getTemplateConfig(array $config, GscConfigRepository $repository)
     {
-        return array(
+        return [
             'client_id' => isset($config['client_id']) ? (string) $config['client_id'] : '',
             'client_secret' => $repository->maskSecret(isset($config['client_secret']) ? (string) $config['client_secret'] : ''),
             'site_url' => isset($config['site_url']) ? (string) $config['site_url'] : '',
             'is_connected' => !empty($config['is_connected']),
             'last_sync' => isset($config['last_sync']) ? (string) $config['last_sync'] : '',
-        );
+        ];
     }
 
     /**
@@ -308,7 +310,7 @@ class AdminTecGscController extends ModuleAdminController
         $periodEnd = date('Y-m-d', strtotime('-2 days'));
         $periodStart = date('Y-m-d', strtotime('-29 days'));
 
-        return array(
+        return [
             'last_28_days' => $this->getSearchConsoleTotals($idShop, $config, $periodStart, $periodEnd),
             'top_pages' => $this->getSearchConsoleTopPages($idShop, $config, $periodStart, $periodEnd),
             'top_queries' => $this->getSearchConsoleTopQueries($idShop, $config, $periodStart, $periodEnd),
@@ -327,7 +329,7 @@ class AdminTecGscController extends ModuleAdminController
                 ORDER BY impressions DESC
                 LIMIT 10'
             ),
-        );
+        ];
     }
 
     /**
@@ -494,7 +496,7 @@ class AdminTecGscController extends ModuleAdminController
     {
         $siteUrl = isset($config['site_url']) ? (string) $config['site_url'] : '';
         if ($siteUrl === '' || empty($config['is_connected'])) {
-            return array();
+            return [];
         }
 
         try {
@@ -505,7 +507,7 @@ class AdminTecGscController extends ModuleAdminController
         } catch (Exception $exception) {
             PrestaShopLogger::addLog('GSC dashboard sitemaps error: ' . $exception->getMessage(), 2);
 
-            return array();
+            return [];
         }
     }
 
@@ -520,7 +522,7 @@ class AdminTecGscController extends ModuleAdminController
     {
         $row = Db::getInstance()->getRow($sql);
 
-        return is_array($row) ? $row : array();
+        return is_array($row) ? $row : [];
     }
 
     /**
@@ -534,7 +536,7 @@ class AdminTecGscController extends ModuleAdminController
     {
         $rows = Db::getInstance()->executeS($sql);
 
-        return is_array($rows) ? $rows : array();
+        return is_array($rows) ? $rows : [];
     }
 
     /**
@@ -553,6 +555,6 @@ class AdminTecGscController extends ModuleAdminController
         $scheme = parse_url($siteUrl, PHP_URL_SCHEME);
 
         return filter_var($siteUrl, FILTER_VALIDATE_URL)
-            && in_array(strtolower((string) $scheme), array('http', 'https'), true);
+            && in_array(strtolower((string) $scheme), ['http', 'https'], true);
     }
 }

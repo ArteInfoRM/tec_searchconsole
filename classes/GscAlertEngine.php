@@ -1,21 +1,21 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
 use Db;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Generates SEO alerts from stored Search Console data.
@@ -145,7 +145,7 @@ class GscAlertEngine
             return 0;
         }
 
-        Db::getInstance()->insert('tec_gsc_alerts', array(
+        Db::getInstance()->insert('tec_gsc_alerts', [
             'id_shop' => (int) $this->idShop,
             'alert_type' => pSQL($type),
             'page' => pSQL($page),
@@ -155,7 +155,7 @@ class GscAlertEngine
             'delta_pct' => (float) $deltaPct,
             'is_read' => 0,
             'date_add' => date('Y-m-d H:i:s'),
-        ));
+        ]);
 
         return 1;
     }

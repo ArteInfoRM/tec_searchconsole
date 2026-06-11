@@ -5,6 +5,7 @@
 /cache/
 /tmp/
 /documentation/tec_searchconsole_specs.md
+/documentation/*validation*.txt
 .DS_Store
 Thumbs.db
 .idea/

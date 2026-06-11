@@ -1,19 +1,21 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
 
 require_once dirname(__FILE__) . '/../../config/config.inc.php';
 require_once dirname(__FILE__) . '/../../init.php';
 require_once dirname(__FILE__) . '/tec_searchconsole.php';
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 use Tecnoacquisti\SearchConsole\GscAlertEngine;
 use Tecnoacquisti\SearchConsole\GscApiClient;
@@ -31,7 +33,7 @@ $expectedToken = $repository->getCronToken();
 $providedToken = (string) Tools::getValue('token');
 
 if ($providedToken === '' && PHP_SAPI === 'cli') {
-    $options = getopt('', array('token:'));
+    $options = getopt('', ['token:']);
     $providedToken = isset($options['token']) ? (string) $options['token'] : '';
 }
 

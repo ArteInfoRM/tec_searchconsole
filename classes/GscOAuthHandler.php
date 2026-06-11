@@ -1,17 +1,13 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
@@ -21,6 +17,10 @@ use Exception;
 use Google\Client;
 use PrestaShopLogger;
 use Tools;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Handles Google OAuth 2.0 for Search Console.
@@ -62,7 +62,7 @@ class GscOAuthHandler
         $this->client->setClientId(isset($config['client_id']) ? (string) $config['client_id'] : '');
         $this->client->setClientSecret(isset($config['client_secret']) ? (string) $config['client_secret'] : '');
         $this->client->setRedirectUri($this->getCallbackUrl());
-        $this->client->setScopes(array(self::SCOPE));
+        $this->client->setScopes([self::SCOPE]);
         $this->client->setAccessType('offline');
         $this->client->setPrompt('consent');
         $this->client->setIncludeGrantedScopes(true);

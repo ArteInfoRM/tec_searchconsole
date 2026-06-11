@@ -208,4 +208,4 @@ For support, contact Tecnoacquisti.com:
 
 ## License
 
-Commercial license.
+MIT License.

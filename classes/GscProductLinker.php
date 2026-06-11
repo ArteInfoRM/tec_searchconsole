@@ -1,23 +1,23 @@
 <?php
 /**
- * 2009-2026 Arte e Informatica
+ * 2009-2026 Tecnoacquisti.com
  *
- * NOTICE OF LICENSE
+ * For support feel free to contact us on our website at https://www.tecnoacquisti.com
  *
- * This source file is subject to a commercial license.
- *
- * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
- * @copyright 2009-2026 Arte e Informatica
- * @license   Commercial license
+ * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
+ * @copyright 2009-2026 Tecnoacquisti.com
+ * @license   https://opensource.org/licenses/MIT MIT License
  */
-
-declare(strict_types=1);
 
 namespace Tecnoacquisti\SearchConsole;
 
 use Context;
 use Db;
 use Product;
+
+if (!defined('_PS_VERSION_')) {
+    exit;
+}
 
 /**
  * Links stored GSC data to PrestaShop products.
@@ -56,7 +56,7 @@ class GscProductLinker
     {
         $pagePath = $this->getProductPagePath($idProduct);
         if ($pagePath === '') {
-            return array();
+            return [];
         }
 
         $days = max(1, min(365, $days));
@@ -73,7 +73,7 @@ class GscProductLinker
                 AND page LIKE \'%' . pSQL($pagePath) . '%\''
         );
 
-        return is_array($row) ? $row : array();
+        return is_array($row) ? $row : [];
     }
 
     /**
@@ -89,7 +89,7 @@ class GscProductLinker
     {
         $pagePath = $this->getProductPagePath($idProduct);
         if ($pagePath === '') {
-            return array();
+            return [];
         }
 
         $limit = max(1, min(100, $limit));
@@ -112,7 +112,7 @@ class GscProductLinker
             LIMIT ' . (int) $limit
         );
 
-        return is_array($rows) ? $rows : array();
+        return is_array($rows) ? $rows : [];
     }
 
     /**
