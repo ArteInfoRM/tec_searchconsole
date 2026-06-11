@@ -42,6 +42,7 @@ Required PHP extensions:
 5. Connect the Google account and authorize Search Console access.
 
 Release archives include `lib/google_vendor/`, so merchants do not need to run Composer after installation.
+The bundled Google services package is trimmed to the Search Console/Webmasters service used by the module.
 
 ## Google OAuth Setup
 
@@ -194,6 +195,8 @@ Composer is configured with:
 ```
 
 Do not move dependencies to a root `vendor/` directory, because PrestaShop may load module vendors globally and create package conflicts.
+
+The release package intentionally keeps only the Search Console/Webmasters classes from `google/apiclient-services`. If dependencies are reinstalled, remove unused Google service classes again before packaging and regenerate the optimized autoloader.
 
 ## Support
 

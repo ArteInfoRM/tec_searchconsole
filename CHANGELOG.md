@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.1] - 2026-06-11
+
+### Changed
+
+- Trimmed bundled Google API service classes to the Search Console/Webmasters service used by the module.
+- Regenerated the optimized Composer autoloader after vendor trimming.
+- Reduced the release archive size while keeping the module installable without Composer.
+
 ## [1.0.0] - 2026-06-11
 
 ### Added

@@ -9,7 +9,7 @@
  * @author    Arte e Informatica <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Arte e Informatica
  * @license   Commercial license
- * @version   1.0.0
+ * @version   1.0.1
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -33,7 +33,7 @@ class Tec_searchconsole extends Module
     {
         $this->name = 'tec_searchconsole';
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.0';
+        $this->version = '1.0.1';
         $this->author = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
