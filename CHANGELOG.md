@@ -20,6 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 - Replaced Smarty `string_format` usage in module templates with validator-friendly formatting.
 - Removed the unused Google filesystem cache class to avoid serialized payload warnings in validation.
 - Removed direct `Context::getContext()` usage from module-owned files reported by the validator.
+- Removed direct access to the protected module context from the OAuth callback.
 
 ## [1.0.0] - 2026-06-11
 
