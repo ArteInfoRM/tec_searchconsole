@@ -10,6 +10,7 @@
 }
 
 .tec-gsc-config-form .form-group,
+.tec-gsc-retention-form .form-group,
 .tec-gsc-verification-form .form-group {
   margin-left: 0;
   margin-right: 0;
@@ -18,6 +19,16 @@
 .tec-gsc-verification textarea {
   min-height: 76px;
   resize: vertical;
+}
+
+.tec-gsc-retention .panel-body > .row {
+  margin-left: -20px;
+  margin-right: -20px;
+}
+
+.tec-gsc-retention .panel-body > .row > .col-md-6 {
+  padding-left: 20px;
+  padding-right: 20px;
 }
 
 .tec-gsc-actions {
@@ -48,6 +59,55 @@
   width: auto;
 }
 
+.tec-gsc-export-form {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.tec-gsc-export-form .form-group {
+  margin-bottom: 0;
+}
+
+.tec-gsc-export-form label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.tec-gsc-global-export-form {
+  align-items: flex-end;
+}
+
+.tec-gsc-global-export-form .form-control,
+.tec-gsc-global-export-form .btn {
+  height: 36px;
+  line-height: 20px;
+}
+
+.tec-gsc-global-export-form .form-group:first-child .form-control {
+  min-width: 96px;
+}
+
+.tec-gsc-global-export-form .form-group:nth-child(2) .form-control {
+  min-width: 160px;
+}
+
+.tec-gsc-global-export-form .btn {
+  align-items: center;
+  display: inline-flex;
+  gap: 5px;
+  justify-content: center;
+  padding: 7px 14px;
+  white-space: nowrap;
+}
+
+.tec-gsc-global-export-form .btn i {
+  font-size: 13px;
+  line-height: 1;
+  margin: 0;
+}
+
 .tec-gsc-kpi {
   font-size: 28px;
   font-weight: 600;
@@ -61,6 +121,58 @@
 
 .tec-gsc-sitemaps .table {
   margin-bottom: 0;
+}
+
+.tec-gsc-retention .table.tec-gsc-retention-stats {
+  border-collapse: collapse !important;
+  border-spacing: 0 !important;
+  margin-bottom: 12px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.tec-gsc-retention .table.tec-gsc-retention-stats > tbody > tr {
+  border-top: 1px solid #ddd;
+}
+
+.tec-gsc-retention .table.tec-gsc-retention-stats > tbody > tr > th,
+.tec-gsc-retention .table.tec-gsc-retention-stats > tbody > tr > td {
+  background: transparent !important;
+  border: 0 !important;
+  line-height: 1.42857;
+  padding: 9px 12px;
+  vertical-align: middle;
+}
+
+.tec-gsc-retention .table.tec-gsc-retention-stats > tbody > tr > th {
+  width: 58%;
+}
+
+.tec-gsc-retention .table.tec-gsc-retention-stats > tbody > tr > td {
+  width: 42%;
+}
+
+@media (max-width: 991px) {
+  .tec-gsc-retention .panel-body > .row {
+    margin-left: -15px;
+    margin-right: -15px;
+  }
+
+  .tec-gsc-retention .panel-body > .row > .col-md-6 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+
+  .tec-gsc-export-form {
+    align-items: stretch;
+    display: block;
+  }
+
+  .tec-gsc-export-form .form-group,
+  .tec-gsc-export-form .btn {
+    margin-bottom: 10px;
+    width: 100%;
+  }
 }
 
 .tec-gsc-product-section-title {

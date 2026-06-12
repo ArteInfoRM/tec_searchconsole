@@ -33,6 +33,8 @@ class GscConfigRepository
      */
     public function getConfig(int $idShop): array
     {
+        $this->ensureRetentionColumns();
+
         $row = Db::getInstance()->getRow(
             'SELECT * FROM `' . _DB_PREFIX_ . 'tec_gsc_config`
             WHERE id_shop = ' . (int) $idShop
@@ -76,6 +78,51 @@ class GscConfigRepository
             'site_url' => pSQL($siteUrl),
             'date_upd' => date('Y-m-d H:i:s'),
         ], 'id_shop = ' . (int) $idShop);
+    }
+
+    /**
+     * Save retention settings.
+     *
+     * @param int $idShop Shop identifier
+     * @param int $dataRetentionMonths Search Console data retention in months
+     * @param int $alertRetentionDays Alert retention in days
+     *
+     * @return void
+     */
+    public function saveRetentionSettings(int $idShop, int $dataRetentionMonths, int $alertRetentionDays): void
+    {
+        $this->ensureRetentionColumns();
+
+        $retention = new GscDataRetention();
+
+        Db::getInstance()->update('tec_gsc_config', [
+            'data_retention_months' => (int) $retention->normalizeDataRetentionMonths($dataRetentionMonths),
+            'alert_retention_days' => (int) $retention->normalizeAlertRetentionDays($alertRetentionDays),
+            'date_upd' => date('Y-m-d H:i:s'),
+        ], 'id_shop = ' . (int) $idShop);
+    }
+
+    /**
+     * Get normalized retention settings from a configuration row.
+     *
+     * @param array<string, mixed> $config Configuration row
+     *
+     * @return array<string, int> Retention settings
+     */
+    public function getRetentionSettings(array $config): array
+    {
+        $retention = new GscDataRetention();
+        $dataRetentionMonths = isset($config['data_retention_months'])
+            ? (int) $config['data_retention_months']
+            : GscDataRetention::DEFAULT_DATA_RETENTION_MONTHS;
+        $alertRetentionDays = isset($config['alert_retention_days'])
+            ? (int) $config['alert_retention_days']
+            : GscDataRetention::DEFAULT_ALERT_RETENTION_DAYS;
+
+        return [
+            'data_retention_months' => $retention->normalizeDataRetentionMonths($dataRetentionMonths),
+            'alert_retention_days' => $retention->normalizeAlertRetentionDays($alertRetentionDays),
+        ];
     }
 
     /**
@@ -145,6 +192,8 @@ class GscConfigRepository
      */
     public function ensureAllShopRows(): void
     {
+        $this->ensureRetentionColumns();
+
         $shops = Shop::getShops(false, null, true);
         foreach ($shops as $idShop) {
             $this->ensureConfigRow((int) $idShop);
@@ -160,6 +209,8 @@ class GscConfigRepository
      */
     public function ensureConfigRow(int $idShop): void
     {
+        $this->ensureRetentionColumns();
+
         $exists = (int) Db::getInstance()->getValue(
             'SELECT COUNT(*)
             FROM `' . _DB_PREFIX_ . 'tec_gsc_config`
@@ -179,9 +230,38 @@ class GscConfigRepository
             'token_expires' => 0,
             'site_url' => '',
             'is_connected' => 0,
+            'data_retention_months' => GscDataRetention::DEFAULT_DATA_RETENTION_MONTHS,
+            'alert_retention_days' => GscDataRetention::DEFAULT_ALERT_RETENTION_DAYS,
             'date_add' => date('Y-m-d H:i:s'),
             'date_upd' => date('Y-m-d H:i:s'),
         ]);
+    }
+
+    /**
+     * Ensure retention columns exist on upgraded installations.
+     *
+     * @return void
+     */
+    public function ensureRetentionColumns(): void
+    {
+        $table = _DB_PREFIX_ . 'tec_gsc_config';
+        $queries = [];
+
+        if (!$this->columnExists($table, 'data_retention_months')) {
+            $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
+                ADD `data_retention_months` INT(10) UNSIGNED NOT NULL DEFAULT 16
+                AFTER `is_connected`';
+        }
+
+        if (!$this->columnExists($table, 'alert_retention_days')) {
+            $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
+                ADD `alert_retention_days` INT(10) UNSIGNED NOT NULL DEFAULT 180
+                AFTER `data_retention_months`';
+        }
+
+        foreach ($queries as $query) {
+            Db::getInstance()->execute($query);
+        }
     }
 
     /**
@@ -230,5 +310,24 @@ class GscConfigRepository
     private function isMaskedValue(string $value): bool
     {
         return preg_match('/^\*{4,}.{0,}$/', $value) === 1;
+    }
+
+    /**
+     * Check whether a database column exists.
+     *
+     * @param string $table Database table name
+     * @param string $column Database column name
+     *
+     * @return bool True when the column exists
+     */
+    private function columnExists(string $table, string $column): bool
+    {
+        return (bool) Db::getInstance()->getValue(
+            'SELECT COUNT(*)
+            FROM INFORMATION_SCHEMA.COLUMNS
+            WHERE TABLE_SCHEMA = DATABASE()
+                AND TABLE_NAME = \'' . pSQL($table) . '\'
+                AND COLUMN_NAME = \'' . pSQL($column) . '\''
+        );
     }
 }

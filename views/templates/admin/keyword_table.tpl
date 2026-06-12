@@ -14,12 +14,12 @@
     <table class="table">
       <thead>
         <tr>
-          <th>{if $first_column == 'query'}{l s='Query' mod='tec_searchconsole'}{else}{l s='Page' mod='tec_searchconsole'}{/if}</th>
-          <th>{l s='Clicks' mod='tec_searchconsole'}</th>
-          <th>{l s='Impressions' mod='tec_searchconsole'}</th>
-          <th>{l s='Position' mod='tec_searchconsole'}</th>
+          <th>{if $first_column == 'query'}{l s='Query' d='Modules.Tecsearchconsole.Admin'}{else}{l s='Page' d='Modules.Tecsearchconsole.Admin'}{/if}</th>
+          <th>{l s='Clicks' d='Modules.Tecsearchconsole.Admin'}</th>
+          <th>{l s='Impressions' d='Modules.Tecsearchconsole.Admin'}</th>
+          <th>{l s='Position' d='Modules.Tecsearchconsole.Admin'}</th>
           {if isset($rows[0].ctr)}
-            <th>{l s='CTR' mod='tec_searchconsole'}</th>
+            <th>{l s='CTR' d='Modules.Tecsearchconsole.Admin'}</th>
           {/if}
         </tr>
       </thead>
@@ -38,6 +38,6 @@
       </tbody>
     </table>
   {else}
-    <p class="text-muted">{l s='No data available.' mod='tec_searchconsole'}</p>
+    <p class="text-muted">{l s='No data available.' d='Modules.Tecsearchconsole.Admin'}</p>
   {/if}
 </div>

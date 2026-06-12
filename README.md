@@ -14,8 +14,12 @@ The module connects a PrestaShop back office to the Google Search Console API, s
 - Back-office dashboard widget through `dashboardZoneTwo`.
 - Product edit widget through `displayAdminProductsExtra`.
 - Keyword breakdown for product URLs.
+- Stored data export in JSON, CSV, and XML formats.
+- Product-level export using the module-level export format and period settings.
+- Direct link from the module dashboard to the configured Google Search Console property.
 - Optional Google site verification meta tag.
 - Daily cron endpoint for data synchronization.
+- Modern PrestaShop translation domain with bundled Italian translations.
 - Bundled Google API dependencies, so production shops do not need Composer.
 
 ## Compatibility
@@ -102,6 +106,8 @@ The module configuration page includes separate panels for:
 - Manual synchronization.
 - Cron URL.
 - Google site verification tag.
+- Data retention settings and stored data statistics.
+- Data export settings.
 
 The client secret field uses a masked value. If the saved mask is submitted unchanged, the existing secret is preserved.
 
@@ -125,6 +131,8 @@ https://www.example.com
 
 If the property URL in the module does not match the property in Search Console, Google may return empty metrics even if the connection succeeds.
 
+When a property URL is configured, the dashboard displays a direct link to open the matching property in Google Search Console.
+
 ## Cron
 
 Use the cron URL displayed in the module configuration page:
@@ -140,6 +148,42 @@ php /path/to/prestashop/modules/tec_searchconsole/cron.php --token=CRON_TOKEN
 ```
 
 We recommend running the cron once per day after Search Console has updated the previous day's data.
+
+## Data Retention
+
+The module stores local Search Console history in the database to power dashboards, product SEO widgets, and alerts.
+
+The back-office dashboard includes retention settings for:
+
+- Search data: 3, 6, 12, or 16 months, or never delete.
+- Alerts: 90, 180, or 365 days, or never delete.
+
+Cleanup runs automatically after a successful cron synchronization. Merchants can also click **Clean old data now** from the dashboard to remove rows older than the configured retention period.
+
+## Data Export
+
+The module can export locally stored Search Console data for analysis or archival purposes.
+
+Supported export formats:
+
+- JSON.
+- CSV.
+- XML.
+
+Supported periods:
+
+- Last 24 hours.
+- Last 7 days.
+- Last 28 days.
+- Last 3 months.
+- Last 6 months.
+- Last 12 months.
+- Last 16 months.
+- All data.
+
+The module dashboard lets merchants save the default export format and period. The global export downloads all stored rows matching those settings. Product edit pages include an **Export product data** action that exports only rows matching the product URL and uses the same default export settings.
+
+CSV exports sanitize spreadsheet formula prefixes before writing cell values.
 
 ## Back-Office Dashboard
 
@@ -165,6 +209,17 @@ Displayed data includes:
 - CTR.
 - Average position.
 - Top keyword breakdown.
+- Product data export using the default module export settings.
+
+## Translations
+
+Back-office strings use the modern PrestaShop translation domain:
+
+```text
+Modules.Tecsearchconsole.Admin
+```
+
+The module bundles Italian translations under `translations/it-IT/`.
 
 ## Site Verification Tag
 

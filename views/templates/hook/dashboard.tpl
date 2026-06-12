@@ -11,10 +11,10 @@
 <div class="panel tec-dashboard-widget tec-gsc-dashboard-widget">
   <div class="panel-heading">
     <i class="icon icon-search"></i>
-    {l s='Search Console SEO' mod='tec_searchconsole'}
+    {l s='Search Console SEO' d='Modules.Tecsearchconsole.Admin'}
     <span class="panel-heading-action">
       <a href="{$tec_gsc_dashboard_url|escape:'html':'UTF-8'}" class="btn btn-xs btn-default" style="white-space:nowrap;">
-        {l s='View all' mod='tec_searchconsole'}
+        {l s='View all' d='Modules.Tecsearchconsole.Admin'}
       </a>
     </span>
   </div>
@@ -25,40 +25,40 @@
         <div class="col-xs-6 col-sm-3 text-center">
           <div class="tec-gsc-widget-kpi">
             <span class="tec-gsc-widget-number">{$tec_gsc_metrics.clicks|default:0|intval}</span>
-            <span class="tec-gsc-widget-label">{l s='Clicks 28 days' mod='tec_searchconsole'}</span>
+            <span class="tec-gsc-widget-label">{l s='Clicks 28 days' d='Modules.Tecsearchconsole.Admin'}</span>
           </div>
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <div class="tec-gsc-widget-kpi">
             <span class="tec-gsc-widget-number">{$tec_gsc_metrics.impressions|default:0|intval}</span>
-            <span class="tec-gsc-widget-label">{l s='Impressions' mod='tec_searchconsole'}</span>
+            <span class="tec-gsc-widget-label">{l s='Impressions' d='Modules.Tecsearchconsole.Admin'}</span>
           </div>
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <div class="tec-gsc-widget-kpi">
             <span class="tec-gsc-widget-number">{math equation='x * 100' x=$tec_gsc_metrics.ctr|default:0 format='%.2f'}%</span>
-            <span class="tec-gsc-widget-label">{l s='Average CTR' mod='tec_searchconsole'}</span>
+            <span class="tec-gsc-widget-label">{l s='Average CTR' d='Modules.Tecsearchconsole.Admin'}</span>
           </div>
         </div>
         <div class="col-xs-6 col-sm-3 text-center">
           <div class="tec-gsc-widget-kpi">
             <span class="tec-gsc-widget-number">{math equation='x' x=$tec_gsc_metrics.position|default:0 format='%.2f'}</span>
-            <span class="tec-gsc-widget-label">{l s='Average position' mod='tec_searchconsole'}</span>
+            <span class="tec-gsc-widget-label">{l s='Average position' d='Modules.Tecsearchconsole.Admin'}</span>
           </div>
         </div>
       </div>
 
       <h4 class="tec-gsc-widget-title">
-        {l s='Top queries' mod='tec_searchconsole'}
+        {l s='Top queries' d='Modules.Tecsearchconsole.Admin'}
       </h4>
       {if $tec_gsc_top_queries|count}
         <table class="table table-condensed tec-gsc-widget-queries">
           <thead>
             <tr>
-              <th>{l s='Query' mod='tec_searchconsole'}</th>
-              <th>{l s='Clicks' mod='tec_searchconsole'}</th>
-              <th>{l s='Impressions' mod='tec_searchconsole'}</th>
-              <th>{l s='CTR' mod='tec_searchconsole'}</th>
+              <th>{l s='Query' d='Modules.Tecsearchconsole.Admin'}</th>
+              <th>{l s='Clicks' d='Modules.Tecsearchconsole.Admin'}</th>
+              <th>{l s='Impressions' d='Modules.Tecsearchconsole.Admin'}</th>
+              <th>{l s='CTR' d='Modules.Tecsearchconsole.Admin'}</th>
             </tr>
           </thead>
           <tbody>
@@ -73,19 +73,19 @@
           </tbody>
         </table>
       {else}
-        <p class="text-muted text-center">{l s='No query data available.' mod='tec_searchconsole'}</p>
+        <p class="text-muted text-center">{l s='No query data available.' d='Modules.Tecsearchconsole.Admin'}</p>
       {/if}
 
       <h4 class="tec-gsc-widget-title">
-        {l s='Submitted sitemaps' mod='tec_searchconsole'} ({$tec_gsc_sitemap_count|intval})
+        {l s='Submitted sitemaps' d='Modules.Tecsearchconsole.Admin'} ({$tec_gsc_sitemap_count|intval})
       </h4>
       {if $tec_gsc_sitemaps|count}
         <table class="table table-condensed tec-gsc-widget-sitemaps">
           <thead>
             <tr>
-              <th>{l s='Sitemap' mod='tec_searchconsole'}</th>
-              <th>{l s='URLs' mod='tec_searchconsole'}</th>
-              <th>{l s='Status' mod='tec_searchconsole'}</th>
+              <th>{l s='Sitemap' d='Modules.Tecsearchconsole.Admin'}</th>
+              <th>{l s='URLs' d='Modules.Tecsearchconsole.Admin'}</th>
+              <th>{l s='Status' d='Modules.Tecsearchconsole.Admin'}</th>
             </tr>
           </thead>
           <tbody>
@@ -95,9 +95,9 @@
                 <td>{$sitemap.submitted_urls|intval}</td>
                 <td>
                   {if $sitemap.is_pending}
-                    <span class="label label-warning">{l s='Pending' mod='tec_searchconsole'}</span>
+                    <span class="label label-warning">{l s='Pending' d='Modules.Tecsearchconsole.Admin'}</span>
                   {else}
-                    <span class="label label-success">{l s='Processed' mod='tec_searchconsole'}</span>
+                    <span class="label label-success">{l s='Processed' d='Modules.Tecsearchconsole.Admin'}</span>
                   {/if}
                 </td>
               </tr>
@@ -105,10 +105,10 @@
           </tbody>
         </table>
       {else}
-        <p class="text-muted text-center">{l s='No submitted sitemaps available.' mod='tec_searchconsole'}</p>
+        <p class="text-muted text-center">{l s='No submitted sitemaps available.' d='Modules.Tecsearchconsole.Admin'}</p>
       {/if}
     {else}
-      <p class="text-muted text-center">{l s='Search Console is not connected.' mod='tec_searchconsole'}</p>
+      <p class="text-muted text-center">{l s='Search Console is not connected.' d='Modules.Tecsearchconsole.Admin'}</p>
     {/if}
   </div>
 </div>

@@ -2,7 +2,7 @@
 <module>
     <name>tec_searchconsole</name>
     <displayName><![CDATA[Search Console SEO Dashboard]]></displayName>
-    <version><![CDATA[1.0.1]]></version>
+    <version><![CDATA[1.0.3]]></version>
     <description><![CDATA[Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, and alerts.]]></description>
     <author><![CDATA[Tecnoacquisti.com]]></author>
     <tab><![CDATA[analytics_stats]]></tab>

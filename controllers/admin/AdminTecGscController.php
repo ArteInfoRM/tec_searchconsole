@@ -16,6 +16,8 @@ if (!defined('_PS_VERSION_')) {
 use Tecnoacquisti\SearchConsole\GscAlertEngine;
 use Tecnoacquisti\SearchConsole\GscApiClient;
 use Tecnoacquisti\SearchConsole\GscConfigRepository;
+use Tecnoacquisti\SearchConsole\GscDataExporter;
+use Tecnoacquisti\SearchConsole\GscDataRetention;
 use Tecnoacquisti\SearchConsole\GscDataSync;
 use Tecnoacquisti\SearchConsole\GscOAuthHandler;
 
@@ -45,12 +47,26 @@ class AdminTecGscController extends ModuleAdminController
      */
     public function postProcess()
     {
+        if (Tools::getIsset('export_gsc_data')) {
+            $this->exportData();
+
+            return;
+        }
+
         if (Tools::isSubmit('submitTecGscConfig')) {
             $this->saveConfig();
         }
 
         if (Tools::isSubmit('submitTecGscVerification')) {
             $this->saveVerificationTag();
+        }
+
+        if (Tools::isSubmit('submitTecGscRetention')) {
+            $this->saveRetentionSettings();
+        }
+
+        if (Tools::isSubmit('submitTecGscExportSettings')) {
+            $this->saveExportSettings();
         }
 
         if (Tools::getIsset('connect_google')) {
@@ -63,6 +79,10 @@ class AdminTecGscController extends ModuleAdminController
 
         if (Tools::getIsset('sync_now')) {
             $this->runManualSync();
+        }
+
+        if (Tools::isSubmit('submitTecGscCleanRetention')) {
+            $this->cleanOldData();
         }
 
         parent::postProcess();
@@ -80,6 +100,8 @@ class AdminTecGscController extends ModuleAdminController
         $repository = new GscConfigRepository();
         $idShop = (int) $this->context->shop->id;
         $config = $repository->getConfig($idShop);
+        $retention = new GscDataRetention();
+        $retentionSettings = $repository->getRetentionSettings($config);
         $cronToken = $repository->getCronToken();
         $baseUrl = Tools::getShopDomainSsl(true) . __PS_BASE_URI__;
 
@@ -90,8 +112,19 @@ class AdminTecGscController extends ModuleAdminController
             'gsc_sitemaps' => $this->getSitemaps($idShop, $config),
             'gsc_callback_url' => $baseUrl . 'modules/tec_searchconsole/callback.php',
             'gsc_cron_url' => $baseUrl . 'modules/tec_searchconsole/cron.php?token=' . rawurlencode($cronToken),
+            'gsc_search_console_url' => $this->getSearchConsoleUrl($config),
             'gsc_form_action' => $this->context->link->getAdminLink('AdminTecGsc'),
+            'gsc_export_action' => $this->context->link->getAdminLink('AdminTecGsc'),
+            'gsc_export_controller' => 'AdminTecGsc',
+            'gsc_export_token' => Tools::getAdminTokenLite('AdminTecGsc'),
+            'gsc_export_settings' => $this->getExportSettings($idShop),
             'gsc_verification_tag' => $this->getVerificationTagValue($idShop),
+            'gsc_retention' => $retentionSettings,
+            'gsc_retention_stats' => $retention->getStats(
+                $idShop,
+                $retentionSettings['data_retention_months'],
+                $retentionSettings['alert_retention_days']
+            ),
             'gsc_connect_url' => $this->context->link->getAdminLink('AdminTecGsc') . '&connect_google=1',
             'gsc_disconnect_url' => $this->context->link->getAdminLink('AdminTecGsc') . '&disconnect_google=1',
             'gsc_sync_url' => $this->context->link->getAdminLink('AdminTecGsc') . '&sync_now=1',
@@ -114,11 +147,11 @@ class AdminTecGscController extends ModuleAdminController
         $siteUrl = trim((string) Tools::getValue('site_url'));
 
         if ($clientId === '') {
-            $this->errors[] = $this->module->l('Google Client ID is required.');
+            $this->errors[] = $this->module->trans('Google Client ID is required.', [], 'Modules.Tecsearchconsole.Admin');
         }
 
         if ($siteUrl !== '' && !$this->isValidSiteUrl($siteUrl)) {
-            $this->errors[] = $this->module->l('Search Console property URL must be a valid absolute URL or sc-domain property.');
+            $this->errors[] = $this->module->trans('Search Console property URL must be a valid absolute URL or sc-domain property.', [], 'Modules.Tecsearchconsole.Admin');
         }
 
         if (!empty($this->errors)) {
@@ -126,7 +159,7 @@ class AdminTecGscController extends ModuleAdminController
         }
 
         (new GscConfigRepository())->saveSettings((int) $this->context->shop->id, $clientId, $clientSecret, $siteUrl);
-        $this->confirmations[] = $this->module->l('Settings saved.');
+        $this->confirmations[] = $this->module->trans('Settings saved.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -139,7 +172,7 @@ class AdminTecGscController extends ModuleAdminController
         $submittedTag = trim((string) Tools::getValue('verification_tag'));
         $verificationToken = $this->extractVerificationToken($submittedTag);
         if ($submittedTag !== '' && $verificationToken === '') {
-            $this->errors[] = $this->module->l('Verification tag must be a valid Google Search Console meta tag.');
+            $this->errors[] = $this->module->trans('Verification tag must be a valid Google Search Console meta tag.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
@@ -155,7 +188,37 @@ class AdminTecGscController extends ModuleAdminController
             $this->module->registerHook('displayHeader');
         }
 
-        $this->confirmations[] = $this->module->l('Verification tag saved.');
+        $this->confirmations[] = $this->module->trans('Verification tag saved.', [], 'Modules.Tecsearchconsole.Admin');
+    }
+
+    /**
+     * Save retention settings.
+     *
+     * @return void
+     */
+    private function saveRetentionSettings()
+    {
+        $dataRetentionMonths = $this->getValidatedRetentionValue(
+            Tools::getValue('data_retention_months'),
+            [0, 3, 6, 12, 16]
+        );
+        $alertRetentionDays = $this->getValidatedRetentionValue(
+            Tools::getValue('alert_retention_days'),
+            [0, 90, 180, 365]
+        );
+
+        if ($dataRetentionMonths === null || $alertRetentionDays === null) {
+            $this->errors[] = $this->module->trans('Retention settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+
+            return;
+        }
+
+        (new GscConfigRepository())->saveRetentionSettings(
+            (int) $this->context->shop->id,
+            $dataRetentionMonths,
+            $alertRetentionDays
+        );
+        $this->confirmations[] = $this->module->trans('Retention settings saved.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -188,7 +251,7 @@ class AdminTecGscController extends ModuleAdminController
         try {
             $oauth = new GscOAuthHandler((int) $this->context->shop->id);
             $oauth->revokeAccess();
-            $this->confirmations[] = $this->module->l('Google account disconnected.');
+            $this->confirmations[] = $this->module->trans('Google account disconnected.', [], 'Modules.Tecsearchconsole.Admin');
         } catch (Exception $exception) {
             $this->errors[] = $exception->getMessage();
         }
@@ -206,7 +269,7 @@ class AdminTecGscController extends ModuleAdminController
             $config = (new GscConfigRepository())->getConfig($idShop);
             $siteUrl = isset($config['site_url']) ? (string) $config['site_url'] : '';
             if ($siteUrl === '') {
-                $this->errors[] = $this->module->l('Search Console property URL is required before synchronization.');
+                $this->errors[] = $this->module->trans('Search Console property URL is required before synchronization.', [], 'Modules.Tecsearchconsole.Admin');
 
                 return;
             }
@@ -215,10 +278,151 @@ class AdminTecGscController extends ModuleAdminController
             $apiClient = new GscApiClient($oauth, $siteUrl);
             $processedRows = (new GscDataSync($apiClient, $idShop))->syncRecentDays(30);
             $createdAlerts = (new GscAlertEngine($idShop))->analyzeAndGenerateAlerts();
-            $this->confirmations[] = sprintf($this->module->l('Synchronization completed: %d rows processed, %d alerts created.'), $processedRows, $createdAlerts);
+            $this->confirmations[] = sprintf(
+                $this->module->trans('Synchronization completed: %d rows processed, %d alerts created.', [], 'Modules.Tecsearchconsole.Admin'),
+                $processedRows,
+                $createdAlerts
+            );
         } catch (Exception $exception) {
             $this->errors[] = $exception->getMessage();
         }
+    }
+
+    /**
+     * Clean data older than the configured retention period.
+     *
+     * @return void
+     */
+    private function cleanOldData()
+    {
+        try {
+            $idShop = (int) $this->context->shop->id;
+            $repository = new GscConfigRepository();
+            $config = $repository->getConfig($idShop);
+            $retentionSettings = $repository->getRetentionSettings($config);
+            $retention = new GscDataRetention();
+            $deletedDataRows = $retention->cleanupData($idShop, $retentionSettings['data_retention_months']);
+            $deletedAlertRows = $retention->cleanupAlerts($idShop, $retentionSettings['alert_retention_days']);
+
+            $this->confirmations[] = sprintf(
+                $this->module->trans('Cleanup completed: %d data rows and %d alert rows removed.', [], 'Modules.Tecsearchconsole.Admin'),
+                $deletedDataRows,
+                $deletedAlertRows
+            );
+        } catch (Exception $exception) {
+            $this->errors[] = $exception->getMessage();
+        }
+    }
+
+    /**
+     * Save default export settings.
+     *
+     * @return void
+     */
+    private function saveExportSettings()
+    {
+        $idShop = (int) $this->context->shop->id;
+        $exporter = new GscDataExporter($idShop, (int) $this->context->language->id, $this->context->link);
+        $format = $exporter->normalizeFormat((string) Tools::getValue('export_format'));
+        $period = $exporter->normalizePeriod((string) Tools::getValue('export_period'));
+
+        if ($format === '' || $period === '') {
+            $this->errors[] = $this->module->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+
+            return;
+        }
+
+        Configuration::updateValue('TEC_GSC_EXPORT_FORMAT', $format, false, null, $idShop);
+        Configuration::updateValue('TEC_GSC_EXPORT_PERIOD', $period, false, null, $idShop);
+        $this->confirmations[] = $this->module->trans('Export settings saved.', [], 'Modules.Tecsearchconsole.Admin');
+    }
+
+    /**
+     * Export locally stored Search Console data.
+     *
+     * @return void
+     */
+    private function exportData()
+    {
+        $idProduct = (int) Tools::getValue('id_product', 0);
+        $exporter = new GscDataExporter(
+            (int) $this->context->shop->id,
+            (int) $this->context->language->id,
+            $this->context->link
+        );
+        $format = $exporter->normalizeFormat((string) Tools::getValue('export_format'));
+        $period = $exporter->normalizePeriod((string) Tools::getValue('export_period'));
+        $settings = $this->getExportSettings((int) $this->context->shop->id);
+        if ($format === '') {
+            $format = $settings['format'];
+        }
+
+        if ($period === '') {
+            $period = $settings['period'];
+        }
+
+        if ($format === '' || $period === '') {
+            $this->errors[] = $this->module->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+
+            return;
+        }
+
+        if ($idProduct < 0) {
+            $this->errors[] = $this->module->trans('Product export target is invalid.', [], 'Modules.Tecsearchconsole.Admin');
+
+            return;
+        }
+
+        $rows = $exporter->getRows($period, $idProduct);
+        $content = $exporter->render($rows, $format, $period, $idProduct);
+        $filename = $exporter->getFilename($format, $period, $idProduct);
+
+        if (ob_get_length()) {
+            ob_clean();
+        }
+
+        header('Content-Type: ' . $exporter->getContentType($format));
+        header('Content-Disposition: attachment; filename="' . addslashes($filename) . '"');
+        header('Cache-Control: no-store, no-cache, must-revalidate, max-age=0');
+        header('Pragma: no-cache');
+        echo $content;
+        exit;
+    }
+
+    /**
+     * Get default export settings.
+     *
+     * @param int $idShop Shop identifier
+     *
+     * @return array<string, string> Export settings
+     */
+    private function getExportSettings($idShop)
+    {
+        $exporter = new GscDataExporter((int) $idShop, (int) $this->context->language->id, $this->context->link);
+        $format = $exporter->normalizeFormat((string) Configuration::get('TEC_GSC_EXPORT_FORMAT', null, null, (int) $idShop));
+        $period = $exporter->normalizePeriod((string) Configuration::get('TEC_GSC_EXPORT_PERIOD', null, null, (int) $idShop));
+
+        return [
+            'format' => $format !== '' ? $format : 'json',
+            'period' => $period !== '' ? $period : '28d',
+        ];
+    }
+
+    /**
+     * Build a Google Search Console URL for the configured property.
+     *
+     * @param array<string, mixed> $config Configuration row
+     *
+     * @return string Search Console URL
+     */
+    private function getSearchConsoleUrl(array $config)
+    {
+        $siteUrl = isset($config['site_url']) ? trim((string) $config['site_url']) : '';
+        if ($siteUrl === '') {
+            return '';
+        }
+
+        return 'https://search.google.com/search-console?resource_id=' . rawurlencode($siteUrl);
     }
 
     /**
@@ -525,6 +729,26 @@ class AdminTecGscController extends ModuleAdminController
         $rows = Db::getInstance()->executeS($sql);
 
         return is_array($rows) ? $rows : [];
+    }
+
+    /**
+     * Validate a submitted retention value.
+     *
+     * @param mixed $value Submitted value
+     * @param int[] $allowedValues Allowed retention values
+     *
+     * @return int|null Validated integer or null when invalid
+     */
+    private function getValidatedRetentionValue($value, array $allowedValues)
+    {
+        $value = trim((string) $value);
+        if ($value === '' || preg_match('/^\d+$/', $value) !== 1) {
+            return null;
+        }
+
+        $intValue = (int) $value;
+
+        return in_array($intValue, $allowedValues, true) ? $intValue : null;
     }
 
     /**

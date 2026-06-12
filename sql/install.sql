@@ -8,6 +8,8 @@ CREATE TABLE IF NOT EXISTS `PREFIX_tec_gsc_config` (
     `token_expires` INT(11) DEFAULT 0,
     `site_url` VARCHAR(255) DEFAULT '',
     `is_connected` TINYINT(1) DEFAULT 0,
+    `data_retention_months` INT(10) UNSIGNED NOT NULL DEFAULT 16,
+    `alert_retention_days` INT(10) UNSIGNED NOT NULL DEFAULT 180,
     `last_sync` DATETIME DEFAULT NULL,
     `date_add` DATETIME NOT NULL,
     `date_upd` DATETIME NOT NULL,

@@ -7,7 +7,7 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/MIT MIT License
- * @version   1.0.1
+ * @version   1.0.3
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -31,7 +31,7 @@ class Tec_searchconsole extends Module
     {
         $this->name = 'tec_searchconsole';
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.1';
+        $this->version = '1.0.3';
         $this->author = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -41,8 +41,8 @@ class Tec_searchconsole extends Module
 
         parent::__construct();
 
-        $this->displayName = $this->l('Search Console SEO Dashboard');
-        $this->description = $this->l('Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, and alerts.');
+        $this->displayName = $this->trans('Search Console SEO Dashboard', [], 'Modules.Tecsearchconsole.Admin');
+        $this->description = $this->trans('Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, and alerts.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -108,6 +108,8 @@ class Tec_searchconsole extends Module
         $this->context->smarty->assign([
             'gsc_seo_data' => $linker->getProductSeoData($idProduct, 30),
             'gsc_top_keys' => $linker->getProductTopKeywords($idProduct, 10, 30),
+            'gsc_export_action' => $this->context->link->getAdminLink('AdminTecGsc'),
+            'gsc_export_product_id' => $idProduct,
         ]);
 
         return $this->display(__FILE__, 'views/templates/admin/product_seo.tpl');
@@ -127,7 +129,7 @@ class Tec_searchconsole extends Module
         $controllerName = isset($this->context->controller->controller_name)
             ? (string) $this->context->controller->controller_name
             : (string) Tools::getValue('controller');
-        if (!in_array($controllerName, ['AdminTecGsc', 'AdminDashboard'], true)) {
+        if (!in_array($controllerName, ['AdminTecGsc', 'AdminDashboard', 'AdminProducts', 'AdminProduct', 'AdminCatalog'], true)) {
             return;
         }
 
@@ -372,6 +374,8 @@ class Tec_searchconsole extends Module
     private function deleteConfiguration()
     {
         Configuration::deleteByName('TEC_GSC_CRON_TOKEN');
+        Configuration::deleteByName('TEC_GSC_EXPORT_FORMAT');
+        Configuration::deleteByName('TEC_GSC_EXPORT_PERIOD');
         Configuration::deleteByName('TEC_GSC_VERIFICATION_TOKEN');
 
         return true;

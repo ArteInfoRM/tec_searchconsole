@@ -6,10 +6,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-06-12
+
+### Added
+
+- Added configurable database retention for Search Console history and generated alerts.
+- Added manual cleanup and storage statistics to the back-office dashboard.
+- Added cron cleanup for old Search Console data after each successful synchronization.
+- Added global and product-level exports for stored Search Console data in JSON, CSV, and XML formats.
+- Added default export format and period settings for back-office exports.
+- Added direct back-office link to open the configured property in Google Search Console.
+- Added modern Italian translations for the `Modules.Tecsearchconsole.Admin` translation domain.
+
 ### Fixed
 
 - Fixed back-office form submissions on PrestaShop 9 by relying on the native admin action token.
 - Fixed direct access to OAuth callback and cron endpoints under the PrestaShop 9 modules directory rules.
+- Fixed visual alignment of the stored data table and export controls in the back-office dashboard.
+
+### Changed
+
+- Migrated module UI translations from the legacy module translation system to modern PrestaShop domains.
+- Simplified product edit export controls so product exports use the module-level export settings.
 
 ## [1.0.1] - 2026-06-11
 
