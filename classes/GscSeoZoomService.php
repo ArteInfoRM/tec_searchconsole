@@ -154,7 +154,7 @@ class GscSeoZoomService
     /**
      * Build a SEOZoom suite URL.
      *
-     * @param string $query Domain or URL
+     * @param string $domain Domain
      *
      * @return string SEOZoom URL
      */

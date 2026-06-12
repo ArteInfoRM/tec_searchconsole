@@ -392,24 +392,6 @@ class Tec_searchconsole extends Module
     }
 
     /**
-     * Read Search Console configuration for one shop.
-     *
-     * @param int $idShop Shop identifier
-     *
-     * @return array<string, mixed> Configuration row
-     */
-    private function getSearchConsoleConfig($idShop)
-    {
-        $row = Db::getInstance()->getRow(
-            'SELECT *
-            FROM `' . _DB_PREFIX_ . 'tec_gsc_config`
-            WHERE id_shop = ' . (int) $idShop
-        );
-
-        return is_array($row) ? $row : [];
-    }
-
-    /**
      * Create a Search Console API client when the module is connected.
      *
      * @param int $idShop Shop identifier

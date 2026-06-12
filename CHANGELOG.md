@@ -6,6 +6,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Added French, Spanish, and German back-office translations.
+
+### Fixed
+
+- Fixed compatibility validator warnings in product URL generation, SEOZoom URL PHPDoc, and unused module helpers.
+
 ## [1.0.4] - 2026-06-12
 
 ### Added

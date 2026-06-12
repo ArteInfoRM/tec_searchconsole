@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" version="1.2">
+  <file original="Modules.Tecsearchconsole.Admin" source-language="en-US" target-language="es-ES" datatype="plaintext">
+    <body>
+      <trans-unit id="12-months">
+        <source>12 months</source>
+        <target>12 meses</target>
+      </trans-unit>
+      <trans-unit id="16-months">
+        <source>16 months</source>
+        <target>16 meses</target>
+      </trans-unit>
+      <trans-unit id="180-days">
+        <source>180 days</source>
+        <target>180 días</target>
+      </trans-unit>
+      <trans-unit id="3-months">
+        <source>3 months</source>
+        <target>3 meses</target>
+      </trans-unit>
+      <trans-unit id="365-days">
+        <source>365 days</source>
+        <target>365 días</target>
+      </trans-unit>
+      <trans-unit id="6-months">
+        <source>6 months</source>
+        <target>6 meses</target>
+      </trans-unit>
+      <trans-unit id="90-days">
+        <source>90 days</source>
+        <target>90 días</target>
+      </trans-unit>
+      <trans-unit id="alert-retention">
+        <source>Alert retention</source>
+        <target>Retención de alertas</target>
+      </trans-unit>
+      <trans-unit id="alerts">
+        <source>Alerts</source>
+        <target>Alertas</target>
+      </trans-unit>
+      <trans-unit id="alerts-older-than-this-period-are-removed-during-cron-cleanup">
+        <source>Alerts older than this period are removed during cron cleanup.</source>
+        <target>Las alertas más antiguas que este periodo se eliminan durante la limpieza cron.</target>
+      </trans-unit>
+      <trans-unit id="alerts-ready-for-cleanup">
+        <source>Alerts ready for cleanup</source>
+        <target>Alertas listas para limpieza</target>
+      </trans-unit>
+      <trans-unit id="all-data">
+        <source>All data</source>
+        <target>Todos los datos</target>
+      </trans-unit>
+      <trans-unit id="average-ctr">
+        <source>Average CTR</source>
+        <target>CTR medio</target>
+      </trans-unit>
+      <trans-unit id="average-position">
+        <source>Average position</source>
+        <target>Posición media</target>
+      </trans-unit>
+      <trans-unit id="ctr">
+        <source>CTR</source>
+        <target>CTR</target>
+      </trans-unit>
+      <trans-unit id="clean-old-data-now">
+        <source>Clean old data now</source>
+        <target>Limpiar datos antiguos ahora</target>
+      </trans-unit>
+      <trans-unit id="cleanup-completed">
+        <source>Cleanup completed: %d data rows and %d alert rows removed.</source>
+        <target>Limpieza completada: %d filas de datos y %d filas de alertas eliminadas.</target>
+      </trans-unit>
+      <trans-unit id="clicks">
+        <source>Clicks</source>
+        <target>Clics</target>
+      </trans-unit>
+      <trans-unit id="clicks-28-days">
+        <source>Clicks 28 days</source>
+        <target>Clics 28 días</target>
+      </trans-unit>
+      <trans-unit id="client-id">
+        <source>Client ID</source>
+        <target>ID de cliente</target>
+      </trans-unit>
+      <trans-unit id="client-secret">
+        <source>Client Secret</source>
+        <target>Secreto de cliente</target>
+      </trans-unit>
+      <trans-unit id="connect-google">
+        <source>Connect Google</source>
+        <target>Conectar Google</target>
+      </trans-unit>
+      <trans-unit id="connected">
+        <source>Connected</source>
+        <target>Conectado</target>
+      </trans-unit>
+      <trans-unit id="connection">
+        <source>Connection</source>
+        <target>Conexión</target>
+      </trans-unit>
+      <trans-unit id="cron-url">
+        <source>Cron URL</source>
+        <target>URL cron</target>
+      </trans-unit>
+      <trans-unit id="data-export">
+        <source>Data export</source>
+        <target>Exportación de datos</target>
+      </trans-unit>
+      <trans-unit id="data-retention">
+        <source>Data retention</source>
+        <target>Retención de datos</target>
+      </trans-unit>
+      <trans-unit id="date">
+        <source>Date</source>
+        <target>Fecha</target>
+      </trans-unit>
+      <trans-unit id="delta">
+        <source>Delta</source>
+        <target>Delta</target>
+      </trans-unit>
+      <trans-unit id="disconnect">
+        <source>Disconnect</source>
+        <target>Desconectar</target>
+      </trans-unit>
+      <trans-unit id="errors">
+        <source>Errors</source>
+        <target>Errores</target>
+      </trans-unit>
+      <trans-unit id="export-product-data">
+        <source>Export product data</source>
+        <target>Exportar datos del producto</target>
+      </trans-unit>
+      <trans-unit id="export-settings-contain-an-unsupported-value">
+        <source>Export settings contain an unsupported value.</source>
+        <target>La configuración de exportación contiene un valor no admitido.</target>
+      </trans-unit>
+      <trans-unit id="export-settings-saved">
+        <source>Export settings saved.</source>
+        <target>Configuración de exportación guardada.</target>
+      </trans-unit>
+      <trans-unit id="export-stored-data">
+        <source>Export stored data</source>
+        <target>Exportar datos almacenados</target>
+      </trans-unit>
+      <trans-unit id="format">
+        <source>Format</source>
+        <target>Formato</target>
+      </trans-unit>
+      <trans-unit id="google-api-client-not-bundled">
+        <source>Google API Client is not bundled in this module package. Install a complete module package before connecting Google Search Console.</source>
+        <target>El cliente API de Google no está incluido en este paquete del módulo. Instale un paquete completo antes de conectar Google Search Console.</target>
+      </trans-unit>
+      <trans-unit id="google-client-id-is-required">
+        <source>Google Client ID is required.</source>
+        <target>El ID de cliente de Google es obligatorio.</target>
+      </trans-unit>
+      <trans-unit id="module-description">
+        <source>Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, alerts, and optional SEOZoom API v2 metrics.</source>
+        <target>Integración con la API de Google Search Console con OAuth 2.0, historial SEO local, panel, alertas y métricas opcionales de SEOZoom API v2.</target>
+      </trans-unit>
+      <trans-unit id="google-account-disconnected">
+        <source>Google account disconnected.</source>
+        <target>Cuenta de Google desconectada.</target>
+      </trans-unit>
+      <trans-unit id="html-verification-tag">
+        <source>HTML verification tag</source>
+        <target>Etiqueta HTML de verificación</target>
+      </trans-unit>
+      <trans-unit id="impressions">
+        <source>Impressions</source>
+        <target>Impresiones</target>
+      </trans-unit>
+      <trans-unit id="index">
+        <source>Index</source>
+        <target>Índice</target>
+      </trans-unit>
+      <trans-unit id="keyword-breakdown">
+        <source>Keyword breakdown</source>
+        <target>Desglose de palabras clave</target>
+      </trans-unit>
+      <trans-unit id="last-12-months">
+        <source>Last 12 months</source>
+        <target>Últimos 12 meses</target>
+      </trans-unit>
+      <trans-unit id="last-16-months">
+        <source>Last 16 months</source>
+        <target>Últimos 16 meses</target>
+      </trans-unit>
+      <trans-unit id="last-24-hours">
+        <source>Last 24 hours</source>
+        <target>Últimas 24 horas</target>
+      </trans-unit>
+      <trans-unit id="last-28-days">
+        <source>Last 28 days</source>
+        <target>Últimos 28 días</target>
+      </trans-unit>
+      <trans-unit id="last-3-months">
+        <source>Last 3 months</source>
+        <target>Últimos 3 meses</target>
+      </trans-unit>
+      <trans-unit id="last-6-months">
+        <source>Last 6 months</source>
+        <target>Últimos 6 meses</target>
+      </trans-unit>
+      <trans-unit id="last-7-days">
+        <source>Last 7 days</source>
+        <target>Últimos 7 días</target>
+      </trans-unit>
+      <trans-unit id="last-downloaded">
+        <source>Last downloaded</source>
+        <target>Última descarga</target>
+      </trans-unit>
+      <trans-unit id="last-submitted">
+        <source>Last submitted</source>
+        <target>Último envío</target>
+      </trans-unit>
+      <trans-unit id="last-sync">
+        <source>Last sync</source>
+        <target>Última sincronización</target>
+      </trans-unit>
+      <trans-unit id="low-ctr-opportunities">
+        <source>Low CTR opportunities</source>
+        <target>Oportunidades con CTR bajo</target>
+      </trans-unit>
+      <trans-unit id="never-delete">
+        <source>Never delete</source>
+        <target>No eliminar nunca</target>
+      </trans-unit>
+      <trans-unit id="no-data-available">
+        <source>No data available.</source>
+        <target>No hay datos disponibles.</target>
+      </trans-unit>
+      <trans-unit id="no-keyword-data-available-for-this-product">
+        <source>No keyword data available for this product in the selected period.</source>
+        <target>No hay datos de palabras clave para este producto en el periodo seleccionado.</target>
+      </trans-unit>
+      <trans-unit id="no-query-data-available">
+        <source>No query data available.</source>
+        <target>No hay datos de consultas disponibles.</target>
+      </trans-unit>
+      <trans-unit id="no-submitted-sitemaps-for-property">
+        <source>No submitted sitemaps available for the connected Search Console property.</source>
+        <target>No hay sitemaps enviados disponibles para la propiedad de Search Console conectada.</target>
+      </trans-unit>
+      <trans-unit id="no-submitted-sitemaps-available">
+        <source>No submitted sitemaps available.</source>
+        <target>No hay sitemaps enviados disponibles.</target>
+      </trans-unit>
+      <trans-unit id="no-unread-alerts">
+        <source>No unread alerts.</source>
+        <target>No hay alertas sin leer.</target>
+      </trans-unit>
+      <trans-unit id="not-connected">
+        <source>Not connected</source>
+        <target>No conectado</target>
+      </trans-unit>
+      <trans-unit id="oauth-callback-url">
+        <source>OAuth callback URL</source>
+        <target>URL de callback OAuth</target>
+      </trans-unit>
+      <trans-unit id="oldest-search-date">
+        <source>Oldest search date</source>
+        <target>Fecha de búsqueda más antigua</target>
+      </trans-unit>
+      <trans-unit id="open-in-search-console">
+        <source>Open in Search Console</source>
+        <target>Abrir en Search Console</target>
+      </trans-unit>
+      <trans-unit id="page">
+        <source>Page</source>
+        <target>Página</target>
+      </trans-unit>
+      <trans-unit id="verification-tag-help">
+        <source>Paste the full Google Search Console HTML tag. The module stores only the verification token and prints the meta tag in the front-office header.</source>
+        <target>Pegue la etiqueta HTML completa de Google Search Console. El módulo guarda solo el token de verificación e imprime la metaetiqueta en la cabecera del front-office.</target>
+      </trans-unit>
+      <trans-unit id="pending">
+        <source>Pending</source>
+        <target>Pendiente</target>
+      </trans-unit>
+      <trans-unit id="period">
+        <source>Period</source>
+        <target>Periodo</target>
+      </trans-unit>
+      <trans-unit id="position">
+        <source>Position</source>
+        <target>Posición</target>
+      </trans-unit>
+      <trans-unit id="processed">
+        <source>Processed</source>
+        <target>Procesado</target>
+      </trans-unit>
+      <trans-unit id="product-export-target-is-invalid">
+        <source>Product export target is invalid.</source>
+        <target>El destino de exportación del producto no es válido.</target>
+      </trans-unit>
+      <trans-unit id="property-url">
+        <source>Property URL</source>
+        <target>URL de la propiedad</target>
+      </trans-unit>
+      <trans-unit id="query">
+        <source>Query</source>
+        <target>Consulta</target>
+      </trans-unit>
+      <trans-unit id="retention-settings-contain-an-unsupported-value">
+        <source>Retention settings contain an unsupported value.</source>
+        <target>La configuración de retención contiene un valor no admitido.</target>
+      </trans-unit>
+      <trans-unit id="retention-settings-saved">
+        <source>Retention settings saved.</source>
+        <target>Configuración de retención guardada.</target>
+      </trans-unit>
+      <trans-unit id="rows-older-than-this-period-are-removed">
+        <source>Rows older than this period are removed during cron cleanup.</source>
+        <target>Las filas más antiguas que este periodo se eliminan durante la limpieza cron.</target>
+      </trans-unit>
+      <trans-unit id="save">
+        <source>Save</source>
+        <target>Guardar</target>
+      </trans-unit>
+      <trans-unit id="save-export-settings">
+        <source>Save export settings</source>
+        <target>Guardar configuración de exportación</target>
+      </trans-unit>
+      <trans-unit id="save-retention-settings">
+        <source>Save retention settings</source>
+        <target>Guardar configuración de retención</target>
+      </trans-unit>
+      <trans-unit id="save-verification-tag">
+        <source>Save verification tag</source>
+        <target>Guardar etiqueta de verificación</target>
+      </trans-unit>
+      <trans-unit id="search-console-seo">
+        <source>Search Console SEO</source>
+        <target>Search Console SEO</target>
+      </trans-unit>
+      <trans-unit id="module-name">
+        <source>Search Console SEO Dashboard</source>
+        <target>Panel SEO de Search Console</target>
+      </trans-unit>
+      <trans-unit id="search-console-is-not-connected">
+        <source>Search Console is not connected.</source>
+        <target>Search Console no está conectado.</target>
+      </trans-unit>
+      <trans-unit id="property-url-required-before-sync">
+        <source>Search Console property URL is required before synchronization.</source>
+        <target>La URL de la propiedad de Search Console es obligatoria antes de sincronizar.</target>
+      </trans-unit>
+      <trans-unit id="property-url-invalid">
+        <source>Search Console property URL must be a valid absolute URL or sc-domain property.</source>
+        <target>La URL de la propiedad de Search Console debe ser una URL absoluta válida o una propiedad sc-domain.</target>
+      </trans-unit>
+      <trans-unit id="search-console-verification">
+        <source>Search Console verification</source>
+        <target>Verificación de Search Console</target>
+      </trans-unit>
+      <trans-unit id="search-data-retention">
+        <source>Search data retention</source>
+        <target>Retención de datos de búsqueda</target>
+      </trans-unit>
+      <trans-unit id="search-rows">
+        <source>Search rows</source>
+        <target>Filas de búsqueda</target>
+      </trans-unit>
+      <trans-unit id="search-rows-ready-for-cleanup">
+        <source>Search rows ready for cleanup</source>
+        <target>Filas de búsqueda listas para limpieza</target>
+      </trans-unit>
+      <trans-unit id="search-volume">
+        <source>Search volume</source>
+        <target>Volumen de búsqueda</target>
+      </trans-unit>
+      <trans-unit id="settings-saved">
+        <source>Settings saved.</source>
+        <target>Configuración guardada.</target>
+      </trans-unit>
+      <trans-unit id="sitemap">
+        <source>Sitemap</source>
+        <target>Sitemap</target>
+      </trans-unit>
+      <trans-unit id="status">
+        <source>Status</source>
+        <target>Estado</target>
+      </trans-unit>
+      <trans-unit id="stored-data">
+        <source>Stored data</source>
+        <target>Datos almacenados</target>
+      </trans-unit>
+      <trans-unit id="submitted-urls">
+        <source>Submitted URLs</source>
+        <target>URL enviadas</target>
+      </trans-unit>
+      <trans-unit id="submitted-sitemaps">
+        <source>Submitted sitemaps</source>
+        <target>Sitemaps enviados</target>
+      </trans-unit>
+      <trans-unit id="sync-now">
+        <source>Sync now</source>
+        <target>Sincronizar ahora</target>
+      </trans-unit>
+      <trans-unit id="sync-completed">
+        <source>Synchronization completed: %d rows processed, %d alerts created.</source>
+        <target>Sincronización completada: %d filas procesadas, %d alertas creadas.</target>
+      </trans-unit>
+      <trans-unit id="top-pages">
+        <source>Top pages</source>
+        <target>Páginas principales</target>
+      </trans-unit>
+      <trans-unit id="top-queries">
+        <source>Top queries</source>
+        <target>Consultas principales</target>
+      </trans-unit>
+      <trans-unit id="type">
+        <source>Type</source>
+        <target>Tipo</target>
+      </trans-unit>
+      <trans-unit id="urls">
+        <source>URLs</source>
+        <target>URL</target>
+      </trans-unit>
+      <trans-unit id="unread-alerts">
+        <source>Unread alerts</source>
+        <target>Alertas sin leer</target>
+      </trans-unit>
+      <trans-unit id="verification-tag-invalid">
+        <source>Verification tag must be a valid Google Search Console meta tag.</source>
+        <target>La etiqueta de verificación debe ser una metaetiqueta válida de Google Search Console.</target>
+      </trans-unit>
+      <trans-unit id="verification-tag-saved">
+        <source>Verification tag saved.</source>
+        <target>Etiqueta de verificación guardada.</target>
+      </trans-unit>
+      <trans-unit id="view-all">
+        <source>View all</source>
+        <target>Ver todo</target>
+      </trans-unit>
+      <trans-unit id="warnings">
+        <source>Warnings</source>
+        <target>Advertencias</target>
+      </trans-unit>
+      <trans-unit id="6-hours">
+        <source>6 hours</source>
+        <target>6 horas</target>
+      </trans-unit>
+      <trans-unit id="12-hours">
+        <source>12 hours</source>
+        <target>12 horas</target>
+      </trans-unit>
+      <trans-unit id="24-hours">
+        <source>24 hours</source>
+        <target>24 horas</target>
+      </trans-unit>
+      <trans-unit id="48-hours">
+        <source>48 hours</source>
+        <target>48 horas</target>
+      </trans-unit>
+      <trans-unit id="72-hours">
+        <source>72 hours</source>
+        <target>72 horas</target>
+      </trans-unit>
+      <trans-unit id="7-days">
+        <source>7 days</source>
+        <target>7 días</target>
+      </trans-unit>
+      <trans-unit id="14-days">
+        <source>14 days</source>
+        <target>14 días</target>
+      </trans-unit>
+      <trans-unit id="30-days">
+        <source>30 days</source>
+        <target>30 días</target>
+      </trans-unit>
+      <trans-unit id="domain-metrics-cost-20-seozoom-api-units-per-refresh">
+        <source>Domain metrics cost 20 SEOZoom API units per refresh.</source>
+        <target>Las métricas de dominio cuestan 20 unidades API de SEOZoom por actualización.</target>
+      </trans-unit>
+      <trans-unit id="enter-a-seozoom-api-key-and-property-url">
+        <source>Enter a SEOZoom API key and property URL to show domain metrics.</source>
+        <target>Introduzca una clave API de SEOZoom y la URL de la propiedad para mostrar las métricas del dominio.</target>
+      </trans-unit>
+      <trans-unit id="estimated-organic-traffic">
+        <source>Estimated organic traffic</source>
+        <target>Tráfico orgánico estimado</target>
+      </trans-unit>
+      <trans-unit id="france">
+        <source>France</source>
+        <target>Francia</target>
+      </trans-unit>
+      <trans-unit id="germany">
+        <source>Germany</source>
+        <target>Alemania</target>
+      </trans-unit>
+      <trans-unit id="google-search-console-settings">
+        <source>Google Search Console settings</source>
+        <target>Configuración de Google Search Console</target>
+      </trans-unit>
+      <trans-unit id="italy">
+        <source>Italy</source>
+        <target>Italia</target>
+      </trans-unit>
+      <trans-unit id="last-seozoom-update">
+        <source>Last SEOZoom update</source>
+        <target>Última actualización de SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="no-seozoom-metrics-cached-yet">
+        <source>No SEOZoom metrics cached yet.</source>
+        <target>Aún no hay métricas de SEOZoom en caché.</target>
+      </trans-unit>
+      <trans-unit id="open-domain-in-seozoom">
+        <source>Open domain in SEOZoom</source>
+        <target>Abrir dominio en SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="open-product-in-seozoom">
+        <source>Open product in SEOZoom</source>
+        <target>Abrir producto en SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="organic-keywords">
+        <source>Organic keywords</source>
+        <target>Palabras clave orgánicas</target>
+      </trans-unit>
+      <trans-unit id="refresh-seozoom-metrics">
+        <source>Refresh SEOZoom metrics</source>
+        <target>Actualizar métricas de SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key">
+        <source>SEOZoom API key</source>
+        <target>Clave API de SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key-contains-unsupported-characters">
+        <source>SEOZoom API key contains unsupported characters.</source>
+        <target>La clave API de SEOZoom contiene caracteres no admitidos.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key-and-property-url-required">
+        <source>SEOZoom API key and property URL are required before refreshing metrics.</source>
+        <target>La clave API de SEOZoom y la URL de la propiedad son obligatorias antes de actualizar las métricas.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-cache">
+        <source>SEOZoom cache</source>
+        <target>Caché SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-database">
+        <source>SEOZoom database</source>
+        <target>Base de datos SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-domain-metrics">
+        <source>SEOZoom domain metrics</source>
+        <target>Métricas de dominio SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-domain-metrics-refreshed">
+        <source>SEOZoom domain metrics refreshed.</source>
+        <target>Métricas de dominio SEOZoom actualizadas.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-settings">
+        <source>SEOZoom settings</source>
+        <target>Configuración de SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="spain">
+        <source>Spain</source>
+        <target>España</target>
+      </trans-unit>
+      <trans-unit id="saved-key-is-masked">
+        <source>The saved key is masked. Leave the mask unchanged to keep the current key.</source>
+        <target>La clave guardada está enmascarada. Deje la máscara sin cambios para conservar la clave actual.</target>
+      </trans-unit>
+      <trans-unit id="united-kingdom">
+        <source>United Kingdom</source>
+        <target>Reino Unido</target>
+      </trans-unit>
+      <trans-unit id="zoom-authority">
+        <source>Zoom Authority</source>
+        <target>Zoom Authority</target>
+      </trans-unit>
+      <trans-unit id="zoom-trust">
+        <source>Zoom Trust</source>
+        <target>Zoom Trust</target>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

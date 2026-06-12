@@ -140,9 +140,7 @@ class GscProductLinker
             return '';
         }
 
-        $pageUrl = $this->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
-
-        return is_string($pageUrl) ? $pageUrl : '';
+        return $this->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
     }
 
     /**
