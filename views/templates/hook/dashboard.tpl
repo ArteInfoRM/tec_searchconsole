@@ -20,6 +20,38 @@
   </div>
 
   <div class="panel-body">
+    {if $tec_gsc_seozoom_domain_metrics.enabled && $tec_gsc_seozoom_domain_metrics.has_data}
+      <h4 class="tec-gsc-widget-title tec-gsc-widget-seozoom-title">
+        {l s='SEOZoom domain metrics' d='Modules.Tecsearchconsole.Admin'}
+      </h4>
+      <div class="row tec-gsc-widget-kpis tec-gsc-widget-seozoom-kpis">
+        <div class="col-xs-6 col-sm-3 text-center">
+          <div class="tec-gsc-widget-kpi">
+            <span class="tec-gsc-widget-number">{math equation='x' x=$tec_gsc_seozoom_domain_metrics.metrics.zoom_authority|default:0 format='%.0f'}</span>
+            <span class="tec-gsc-widget-label">{l s='Zoom Authority' d='Modules.Tecsearchconsole.Admin'}</span>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-3 text-center">
+          <div class="tec-gsc-widget-kpi">
+            <span class="tec-gsc-widget-number">{math equation='x' x=$tec_gsc_seozoom_domain_metrics.metrics.zoom_trust|default:0 format='%.0f'}</span>
+            <span class="tec-gsc-widget-label">{l s='Zoom Trust' d='Modules.Tecsearchconsole.Admin'}</span>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-3 text-center">
+          <div class="tec-gsc-widget-kpi">
+            <span class="tec-gsc-widget-number">{$tec_gsc_seozoom_domain_metrics.metrics.organic_traffic|default:0|intval}</span>
+            <span class="tec-gsc-widget-label">{l s='Estimated organic traffic' d='Modules.Tecsearchconsole.Admin'}</span>
+          </div>
+        </div>
+        <div class="col-xs-6 col-sm-3 text-center">
+          <div class="tec-gsc-widget-kpi">
+            <span class="tec-gsc-widget-number">{$tec_gsc_seozoom_domain_metrics.metrics.organic_keywords|default:0|intval}</span>
+            <span class="tec-gsc-widget-label">{l s='Organic keywords' d='Modules.Tecsearchconsole.Admin'}</span>
+          </div>
+        </div>
+      </div>
+    {/if}
+
     {if $tec_gsc_is_connected}
       <div class="row tec-gsc-widget-kpis">
         <div class="col-xs-6 col-sm-3 text-center">
@@ -52,12 +84,21 @@
         {l s='Top queries' d='Modules.Tecsearchconsole.Admin'}
       </h4>
       {if $tec_gsc_top_queries|count}
+        {assign var=tec_gsc_has_search_volume value=false}
+        {foreach from=$tec_gsc_top_queries item=volume_query}
+          {if isset($volume_query.search_volume)}
+            {assign var=tec_gsc_has_search_volume value=true}
+          {/if}
+        {/foreach}
         <table class="table table-condensed tec-gsc-widget-queries">
           <thead>
             <tr>
               <th>{l s='Query' d='Modules.Tecsearchconsole.Admin'}</th>
               <th>{l s='Clicks' d='Modules.Tecsearchconsole.Admin'}</th>
               <th>{l s='Impressions' d='Modules.Tecsearchconsole.Admin'}</th>
+              {if $tec_gsc_has_search_volume}
+                <th>{l s='Search volume' d='Modules.Tecsearchconsole.Admin'}</th>
+              {/if}
               <th>{l s='CTR' d='Modules.Tecsearchconsole.Admin'}</th>
             </tr>
           </thead>
@@ -67,6 +108,9 @@
                 <td class="tec-gsc-query">{$query.query|escape:'html':'UTF-8'}</td>
                 <td>{$query.clicks|intval}</td>
                 <td>{$query.impressions|intval}</td>
+                {if $tec_gsc_has_search_volume}
+                  <td>{if isset($query.search_volume)}{$query.search_volume|intval}{else}-{/if}</td>
+                {/if}
                 <td>{math equation='x * 100' x=$query.ctr|default:0 format='%.2f'}%</td>
               </tr>
             {/foreach}

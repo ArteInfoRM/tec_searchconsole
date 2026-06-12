@@ -155,8 +155,8 @@
         <target>L'ID client Google è obbligatorio.</target>
       </trans-unit>
       <trans-unit id="module-description">
-        <source>Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, and alerts.</source>
-        <target>Integrazione con le API di Google Search Console con OAuth 2.0, storico SEO locale, dashboard e avvisi.</target>
+        <source>Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, alerts, and optional SEOZoom API v2 metrics.</source>
+        <target>Integrazione con le API di Google Search Console con OAuth 2.0, storico SEO locale, dashboard, avvisi e metriche opzionali SEOZoom API v2.</target>
       </trans-unit>
       <trans-unit id="google-account-disconnected">
         <source>Google account disconnected.</source>
@@ -366,6 +366,10 @@
         <source>Search rows ready for cleanup</source>
         <target>Righe di ricerca pronte per la pulizia</target>
       </trans-unit>
+      <trans-unit id="search-volume">
+        <source>Search volume</source>
+        <target>Volume di ricerca</target>
+      </trans-unit>
       <trans-unit id="settings-saved">
         <source>Settings saved.</source>
         <target>Impostazioni salvate.</target>
@@ -433,6 +437,142 @@
       <trans-unit id="warnings">
         <source>Warnings</source>
         <target>Avvisi</target>
+      </trans-unit>
+      <trans-unit id="6-hours">
+        <source>6 hours</source>
+        <target>6 ore</target>
+      </trans-unit>
+      <trans-unit id="12-hours">
+        <source>12 hours</source>
+        <target>12 ore</target>
+      </trans-unit>
+      <trans-unit id="24-hours">
+        <source>24 hours</source>
+        <target>24 ore</target>
+      </trans-unit>
+      <trans-unit id="48-hours">
+        <source>48 hours</source>
+        <target>48 ore</target>
+      </trans-unit>
+      <trans-unit id="72-hours">
+        <source>72 hours</source>
+        <target>72 ore</target>
+      </trans-unit>
+      <trans-unit id="7-days">
+        <source>7 days</source>
+        <target>7 giorni</target>
+      </trans-unit>
+      <trans-unit id="14-days">
+        <source>14 days</source>
+        <target>14 giorni</target>
+      </trans-unit>
+      <trans-unit id="30-days">
+        <source>30 days</source>
+        <target>30 giorni</target>
+      </trans-unit>
+      <trans-unit id="domain-metrics-cost-20-seozoom-api-units-per-refresh">
+        <source>Domain metrics cost 20 SEOZoom API units per refresh.</source>
+        <target>Le metriche dominio costano 20 unit API SEOZoom per aggiornamento.</target>
+      </trans-unit>
+      <trans-unit id="enter-a-seozoom-api-key-and-property-url">
+        <source>Enter a SEOZoom API key and property URL to show domain metrics.</source>
+        <target>Inserisci una chiave API SEOZoom e l'URL della proprietà per mostrare le metriche dominio.</target>
+      </trans-unit>
+      <trans-unit id="estimated-organic-traffic">
+        <source>Estimated organic traffic</source>
+        <target>Traffico organico stimato</target>
+      </trans-unit>
+      <trans-unit id="france">
+        <source>France</source>
+        <target>Francia</target>
+      </trans-unit>
+      <trans-unit id="germany">
+        <source>Germany</source>
+        <target>Germania</target>
+      </trans-unit>
+      <trans-unit id="google-search-console-settings">
+        <source>Google Search Console settings</source>
+        <target>Impostazioni Google Search Console</target>
+      </trans-unit>
+      <trans-unit id="italy">
+        <source>Italy</source>
+        <target>Italia</target>
+      </trans-unit>
+      <trans-unit id="last-seozoom-update">
+        <source>Last SEOZoom update</source>
+        <target>Ultimo aggiornamento SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="no-seozoom-metrics-cached-yet">
+        <source>No SEOZoom metrics cached yet.</source>
+        <target>Nessuna metrica SEOZoom ancora in cache.</target>
+      </trans-unit>
+      <trans-unit id="open-domain-in-seozoom">
+        <source>Open domain in SEOZoom</source>
+        <target>Apri dominio in SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="open-product-in-seozoom">
+        <source>Open product in SEOZoom</source>
+        <target>Apri prodotto in SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="organic-keywords">
+        <source>Organic keywords</source>
+        <target>Keyword organiche</target>
+      </trans-unit>
+      <trans-unit id="refresh-seozoom-metrics">
+        <source>Refresh SEOZoom metrics</source>
+        <target>Aggiorna metriche SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key">
+        <source>SEOZoom API key</source>
+        <target>Chiave API SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key-contains-unsupported-characters">
+        <source>SEOZoom API key contains unsupported characters.</source>
+        <target>La chiave API SEOZoom contiene caratteri non supportati.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-api-key-and-property-url-required">
+        <source>SEOZoom API key and property URL are required before refreshing metrics.</source>
+        <target>La chiave API SEOZoom e l'URL della proprietà sono obbligatori prima di aggiornare le metriche.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-cache">
+        <source>SEOZoom cache</source>
+        <target>Cache SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-database">
+        <source>SEOZoom database</source>
+        <target>Database SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-domain-metrics">
+        <source>SEOZoom domain metrics</source>
+        <target>Metriche dominio SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="seozoom-domain-metrics-refreshed">
+        <source>SEOZoom domain metrics refreshed.</source>
+        <target>Metriche dominio SEOZoom aggiornate.</target>
+      </trans-unit>
+      <trans-unit id="seozoom-settings">
+        <source>SEOZoom settings</source>
+        <target>Impostazioni SEOZoom</target>
+      </trans-unit>
+      <trans-unit id="spain">
+        <source>Spain</source>
+        <target>Spagna</target>
+      </trans-unit>
+      <trans-unit id="saved-key-is-masked">
+        <source>The saved key is masked. Leave the mask unchanged to keep the current key.</source>
+        <target>La chiave salvata è mascherata. Lascia invariata la maschera per mantenere la chiave corrente.</target>
+      </trans-unit>
+      <trans-unit id="united-kingdom">
+        <source>United Kingdom</source>
+        <target>Regno Unito</target>
+      </trans-unit>
+      <trans-unit id="zoom-authority">
+        <source>Zoom Authority</source>
+        <target>Zoom Authority</target>
+      </trans-unit>
+      <trans-unit id="zoom-trust">
+        <source>Zoom Trust</source>
+        <target>Zoom Trust</target>
       </trans-unit>
     </body>
   </file>

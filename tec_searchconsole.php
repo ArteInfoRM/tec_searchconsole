@@ -7,7 +7,7 @@
  * @author    Tecnoacquisti.com <helpdesk@tecnoacquisti.com>
  * @copyright 2009-2026 Tecnoacquisti.com
  * @license   https://opensource.org/licenses/MIT MIT License
- * @version   1.0.3
+ * @version   1.0.4
  */
 
 if (!defined('_PS_VERSION_')) {
@@ -18,6 +18,8 @@ use Tecnoacquisti\SearchConsole\GscApiClient;
 use Tecnoacquisti\SearchConsole\GscConfigRepository;
 use Tecnoacquisti\SearchConsole\GscOAuthHandler;
 use Tecnoacquisti\SearchConsole\GscProductLinker;
+use Tecnoacquisti\SearchConsole\GscSeoZoomRepository;
+use Tecnoacquisti\SearchConsole\GscSeoZoomService;
 
 /**
  * Google Search Console integration module.
@@ -31,7 +33,7 @@ class Tec_searchconsole extends Module
     {
         $this->name = 'tec_searchconsole';
         $this->tab = 'analytics_stats';
-        $this->version = '1.0.3';
+        $this->version = '1.0.4';
         $this->author = 'Tecnoacquisti.com';
         $this->need_instance = 0;
         $this->bootstrap = true;
@@ -42,7 +44,7 @@ class Tec_searchconsole extends Module
         parent::__construct();
 
         $this->displayName = $this->trans('Search Console SEO Dashboard', [], 'Modules.Tecsearchconsole.Admin');
-        $this->description = $this->trans('Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, and alerts.', [], 'Modules.Tecsearchconsole.Admin');
+        $this->description = $this->trans('Google Search Console API integration with OAuth 2.0, local SEO history, dashboard, alerts, and optional SEOZoom API v2 metrics.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -104,12 +106,15 @@ class Tec_searchconsole extends Module
         $idShop = (int) $this->context->shop->id;
         $idLang = (int) $this->context->language->id;
         $linker = new GscProductLinker($idShop, $idLang, $this->context->link);
+        $productUrl = $linker->getProductPageUrl($idProduct);
+        $seoZoomUrl = $productUrl !== '' ? (new GscSeoZoomService())->buildPageSeoZoomUrl($productUrl) : '';
 
         $this->context->smarty->assign([
             'gsc_seo_data' => $linker->getProductSeoData($idProduct, 30),
             'gsc_top_keys' => $linker->getProductTopKeywords($idProduct, 10, 30),
             'gsc_export_action' => $this->context->link->getAdminLink('AdminTecGsc'),
             'gsc_export_product_id' => $idProduct,
+            'gsc_seozoom_product_url' => $seoZoomUrl,
         ]);
 
         return $this->display(__FILE__, 'views/templates/admin/product_seo.tpl');
@@ -169,7 +174,7 @@ class Tec_searchconsole extends Module
     public function hookDashboardZoneTwo($params)
     {
         $idShop = isset($this->context->shop->id) ? (int) $this->context->shop->id : 1;
-        $config = $this->getSearchConsoleConfig($idShop);
+        $config = (new GscConfigRepository())->getConfig($idShop);
         $metrics = [
             'clicks' => 0,
             'impressions' => 0,
@@ -178,6 +183,7 @@ class Tec_searchconsole extends Module
         ];
         $sitemaps = [];
         $topQueries = [];
+        $seoZoomDomainMetrics = (new GscSeoZoomService())->getDomainMetrics($idShop, $config);
 
         $apiClient = $this->getSearchConsoleApiClient($idShop, $config);
         if ($apiClient instanceof GscApiClient) {
@@ -188,10 +194,13 @@ class Tec_searchconsole extends Module
             $sitemaps = $apiClient->listSitemaps();
         }
 
+        $topQueries = (new GscSeoZoomService())->enrichQueryRowsWithSearchVolume($idShop, $config, $topQueries);
+
         $this->context->smarty->assign([
             'tec_gsc_dashboard_url' => $this->context->link->getAdminLink('AdminTecGsc'),
             'tec_gsc_is_connected' => !empty($config['is_connected']),
             'tec_gsc_metrics' => $metrics,
+            'tec_gsc_seozoom_domain_metrics' => $seoZoomDomainMetrics,
             'tec_gsc_top_queries' => $topQueries,
             'tec_gsc_sitemaps' => array_slice($sitemaps, 0, 5),
             'tec_gsc_sitemap_count' => count($sitemaps),
@@ -361,6 +370,7 @@ class Tec_searchconsole extends Module
             $repository = new GscConfigRepository();
             $repository->ensureAllShopRows();
             $repository->getCronToken();
+            (new GscSeoZoomRepository())->ensureTables();
         }
 
         return true;

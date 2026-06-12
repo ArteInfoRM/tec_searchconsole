@@ -1,8 +1,8 @@
 # Tec Search Console
 
-Google Search Console integration for PrestaShop 8 and 9, developed by Tecnoacquisti.com®.
+Google Search Console and optional SEOZoom API v2 integration for PrestaShop 8 and 9, developed by Tecnoacquisti.com®.
 
-The module connects a PrestaShop back office to the Google Search Console API, stores SEO metrics locally, and exposes Search Console data where merchants need it most: the module dashboard, the native back-office dashboard, and the product edit page.
+The module connects a PrestaShop back office to the Google Search Console API, stores SEO metrics locally, and exposes Search Console data where merchants need it most: the module dashboard, the native back-office dashboard, and the product edit page. When configured, SEOZoom API v2 adds cached domain visibility metrics and monthly search volume for dashboard queries.
 
 ## Features
 
@@ -10,6 +10,7 @@ The module connects a PrestaShop back office to the Google Search Console API, s
 - Search Analytics metrics for the last 28 complete days.
 - Dashboard cards for clicks, impressions, average CTR, and average position.
 - Top pages and top queries ordered by clicks.
+- Optional SEOZoom API v2 search volume for dashboard top queries.
 - Submitted sitemap list from Search Console.
 - Back-office dashboard widget through `dashboardZoneTwo`.
 - Product edit widget through `displayAdminProductsExtra`.
@@ -17,6 +18,8 @@ The module connects a PrestaShop back office to the Google Search Console API, s
 - Stored data export in JSON, CSV, and XML formats.
 - Product-level export using the module-level export format and period settings.
 - Direct link from the module dashboard to the configured Google Search Console property.
+- Optional SEOZoom API v2 connection for cached domain authority and organic visibility metrics.
+- Direct links from the module dashboard and product edit page to SEOZoom analysis.
 - Optional Google site verification meta tag.
 - Daily cron endpoint for data synchronization.
 - Modern PrestaShop translation domain with bundled Italian translations.
@@ -108,8 +111,10 @@ The module configuration page includes separate panels for:
 - Google site verification tag.
 - Data retention settings and stored data statistics.
 - Data export settings.
+- SEOZoom API key, database, and cache duration.
 
 The client secret field uses a masked value. If the saved mask is submitted unchanged, the existing secret is preserved.
+The SEOZoom API key field uses the same masked-value behavior.
 
 ### Configure the Module
 
@@ -132,6 +137,22 @@ https://www.example.com
 If the property URL in the module does not match the property in Search Console, Google may return empty metrics even if the connection succeeds.
 
 When a property URL is configured, the dashboard displays a direct link to open the matching property in Google Search Console.
+
+## SEOZoom Integration
+
+The module can optionally connect to SEOZoom API v2 to show compact domain metrics in the **Search Console SEO** dashboard.
+
+Displayed data includes:
+
+- Zoom Authority.
+- Zoom Trust.
+- Estimated organic traffic.
+- Total organic keywords.
+
+The dashboard caches domain metrics locally. By default, data is refreshed every 24 hours; merchants can choose 6, 12, 24, 48, 72, 168, 336, or 720 hours. A manual refresh button is also available.
+
+SEOZoom domain metrics use the `domains?action=metrics` endpoint and cost 20 SEOZoom API units per refresh. Product edit pages do not call SEOZoom APIs; they only include a direct SEOZoom link for the product URL.
+When SEOZoom is configured, dashboard top query rows are enriched with monthly search volume from the `keywords?action=metrics` endpoint. Keyword metrics cost 10 SEOZoom API units per keyword and use the same cache duration.
 
 ## Cron
 
@@ -194,6 +215,7 @@ The module registers `dashboardZoneTwo` and displays:
 - Average CTR.
 - Average position.
 - Top queries.
+- Search volume for top queries when SEOZoom is configured.
 - Submitted sitemaps.
 
 The widget is read-only and links to the full Search Console SEO dashboard.
@@ -210,6 +232,7 @@ Displayed data includes:
 - Average position.
 - Top keyword breakdown.
 - Product data export using the default module export settings.
+- Direct SEOZoom link for the product URL.
 
 ## Translations
 

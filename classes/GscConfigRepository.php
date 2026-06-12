@@ -33,7 +33,7 @@ class GscConfigRepository
      */
     public function getConfig(int $idShop): array
     {
-        $this->ensureRetentionColumns();
+        $this->ensureConfigColumns();
 
         $row = Db::getInstance()->getRow(
             'SELECT * FROM `' . _DB_PREFIX_ . 'tec_gsc_config`
@@ -76,6 +76,32 @@ class GscConfigRepository
             'client_id' => pSQL($clientId),
             'client_secret' => pSQL($secretToStore),
             'site_url' => pSQL($siteUrl),
+            'date_upd' => date('Y-m-d H:i:s'),
+        ], 'id_shop = ' . (int) $idShop);
+    }
+
+    /**
+     * Save SEOZoom settings.
+     *
+     * @param int $idShop Shop identifier
+     * @param string $apiKey SEOZoom API key or masked value
+     * @param string $db SEOZoom database code
+     * @param int $cacheHours Cache duration in hours
+     *
+     * @return void
+     */
+    public function saveSeoZoomSettings(int $idShop, string $apiKey, string $db, int $cacheHours): void
+    {
+        $config = $this->getConfig($idShop);
+        $storedApiKey = isset($config['seozoom_api_key']) ? (string) $config['seozoom_api_key'] : '';
+        $apiKeyToStore = $this->isMaskedValue($apiKey) || $apiKey === ''
+            ? $storedApiKey
+            : $apiKey;
+
+        Db::getInstance()->update('tec_gsc_config', [
+            'seozoom_api_key' => pSQL($apiKeyToStore),
+            'seozoom_db' => pSQL($this->normalizeSeoZoomDb($db)),
+            'seozoom_cache_hours' => (int) $this->normalizeSeoZoomCacheHours($cacheHours),
             'date_upd' => date('Y-m-d H:i:s'),
         ], 'id_shop = ' . (int) $idShop);
     }
@@ -192,7 +218,7 @@ class GscConfigRepository
      */
     public function ensureAllShopRows(): void
     {
-        $this->ensureRetentionColumns();
+        $this->ensureConfigColumns();
 
         $shops = Shop::getShops(false, null, true);
         foreach ($shops as $idShop) {
@@ -209,7 +235,7 @@ class GscConfigRepository
      */
     public function ensureConfigRow(int $idShop): void
     {
-        $this->ensureRetentionColumns();
+        $this->ensureConfigColumns();
 
         $exists = (int) Db::getInstance()->getValue(
             'SELECT COUNT(*)
@@ -232,6 +258,9 @@ class GscConfigRepository
             'is_connected' => 0,
             'data_retention_months' => GscDataRetention::DEFAULT_DATA_RETENTION_MONTHS,
             'alert_retention_days' => GscDataRetention::DEFAULT_ALERT_RETENTION_DAYS,
+            'seozoom_api_key' => '',
+            'seozoom_db' => 'it',
+            'seozoom_cache_hours' => 24,
             'date_add' => date('Y-m-d H:i:s'),
             'date_upd' => date('Y-m-d H:i:s'),
         ]);
@@ -243,6 +272,16 @@ class GscConfigRepository
      * @return void
      */
     public function ensureRetentionColumns(): void
+    {
+        $this->ensureConfigColumns();
+    }
+
+    /**
+     * Ensure configuration columns exist on upgraded installations.
+     *
+     * @return void
+     */
+    public function ensureConfigColumns(): void
     {
         $table = _DB_PREFIX_ . 'tec_gsc_config';
         $queries = [];
@@ -257,6 +296,24 @@ class GscConfigRepository
             $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
                 ADD `alert_retention_days` INT(10) UNSIGNED NOT NULL DEFAULT 180
                 AFTER `data_retention_months`';
+        }
+
+        if (!$this->columnExists($table, 'seozoom_api_key')) {
+            $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
+                ADD `seozoom_api_key` VARCHAR(255) NOT NULL DEFAULT \'\'
+                AFTER `alert_retention_days`';
+        }
+
+        if (!$this->columnExists($table, 'seozoom_db')) {
+            $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
+                ADD `seozoom_db` VARCHAR(5) NOT NULL DEFAULT \'it\'
+                AFTER `seozoom_api_key`';
+        }
+
+        if (!$this->columnExists($table, 'seozoom_cache_hours')) {
+            $queries[] = 'ALTER TABLE `' . pSQL($table) . '`
+                ADD `seozoom_cache_hours` INT(10) UNSIGNED NOT NULL DEFAULT 24
+                AFTER `seozoom_db`';
         }
 
         foreach ($queries as $query) {
@@ -280,6 +337,35 @@ class GscConfigRepository
         $suffix = substr($clientSecret, -4);
 
         return '********' . $suffix;
+    }
+
+    /**
+     * Normalize a SEOZoom database code.
+     *
+     * @param string $db Submitted database code
+     *
+     * @return string Supported database code
+     */
+    public function normalizeSeoZoomDb(string $db): string
+    {
+        $db = strtolower(trim($db));
+        $allowed = ['it', 'es', 'fr', 'de', 'uk'];
+
+        return in_array($db, $allowed, true) ? $db : 'it';
+    }
+
+    /**
+     * Normalize SEOZoom cache duration.
+     *
+     * @param int $cacheHours Submitted cache duration
+     *
+     * @return int Supported cache duration
+     */
+    public function normalizeSeoZoomCacheHours(int $cacheHours): int
+    {
+        $allowed = [6, 12, 24, 48, 72, 168, 336, 720];
+
+        return in_array($cacheHours, $allowed, true) ? $cacheHours : 24;
     }
 
     /**

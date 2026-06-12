@@ -123,6 +123,29 @@ class GscProductLinker
     }
 
     /**
+     * Build the canonical product URL.
+     *
+     * @param int $idProduct Product identifier
+     *
+     * @return string Product URL
+     */
+    public function getProductPageUrl(int $idProduct): string
+    {
+        if ($idProduct <= 0) {
+            return '';
+        }
+
+        $product = new Product($idProduct, false, $this->idLang, $this->idShop);
+        if (!isset($product->id) || (int) $product->id <= 0) {
+            return '';
+        }
+
+        $pageUrl = $this->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
+
+        return is_string($pageUrl) ? $pageUrl : '';
+    }
+
+    /**
      * Build the canonical product path.
      *
      * @param int $idProduct Product identifier
@@ -135,12 +158,7 @@ class GscProductLinker
             return '';
         }
 
-        $product = new Product($idProduct, false, $this->idLang, $this->idShop);
-        if (!isset($product->id) || (int) $product->id <= 0) {
-            return '';
-        }
-
-        $pageUrl = $this->link->getProductLink($product, null, null, null, $this->idLang, $this->idShop);
+        $pageUrl = $this->getProductPageUrl($idProduct);
         $path = parse_url($pageUrl, PHP_URL_PATH);
 
         return is_string($path) ? rtrim($path, '/') : '';

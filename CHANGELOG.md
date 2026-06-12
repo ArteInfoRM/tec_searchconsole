@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-06-12
+
+### Added
+
+- Added SEOZoom API v2 key, database, and cache settings to the back-office module dashboard.
+- Added cached SEOZoom API v2 domain metrics for Zoom Authority, Zoom Trust, estimated organic traffic, and organic keywords.
+- Added cached SEOZoom API v2 search volume for dashboard top queries.
+- Added direct SEOZoom links for the configured domain and product URLs.
+
 ## [1.0.3] - 2026-06-12
 
 ### Added

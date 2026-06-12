@@ -20,6 +20,7 @@ use Tecnoacquisti\SearchConsole\GscDataExporter;
 use Tecnoacquisti\SearchConsole\GscDataRetention;
 use Tecnoacquisti\SearchConsole\GscDataSync;
 use Tecnoacquisti\SearchConsole\GscOAuthHandler;
+use Tecnoacquisti\SearchConsole\GscSeoZoomService;
 
 /**
  * Back-office dashboard controller for Search Console data.
@@ -55,6 +56,10 @@ class AdminTecGscController extends ModuleAdminController
 
         if (Tools::isSubmit('submitTecGscConfig')) {
             $this->saveConfig();
+        }
+
+        if (Tools::isSubmit('submitTecGscRefreshSeoZoom')) {
+            $this->refreshSeoZoomDomainMetrics();
         }
 
         if (Tools::isSubmit('submitTecGscVerification')) {
@@ -113,6 +118,7 @@ class AdminTecGscController extends ModuleAdminController
             'gsc_callback_url' => $baseUrl . 'modules/tec_searchconsole/callback.php',
             'gsc_cron_url' => $baseUrl . 'modules/tec_searchconsole/cron.php?token=' . rawurlencode($cronToken),
             'gsc_search_console_url' => $this->getSearchConsoleUrl($config),
+            'gsc_seozoom_domain_metrics' => $this->getSeoZoomDomainMetrics($idShop, $config),
             'gsc_form_action' => $this->context->link->getAdminLink('AdminTecGsc'),
             'gsc_export_action' => $this->context->link->getAdminLink('AdminTecGsc'),
             'gsc_export_controller' => 'AdminTecGsc',
@@ -145,21 +151,53 @@ class AdminTecGscController extends ModuleAdminController
         $clientId = trim((string) Tools::getValue('client_id'));
         $clientSecret = trim((string) Tools::getValue('client_secret'));
         $siteUrl = trim((string) Tools::getValue('site_url'));
-
-        if ($clientId === '') {
-            $this->errors[] = $this->module->trans('Google Client ID is required.', [], 'Modules.Tecsearchconsole.Admin');
-        }
+        $seoZoomApiKey = trim((string) Tools::getValue('seozoom_api_key'));
+        $repository = new GscConfigRepository();
+        $seoZoomDb = $repository->normalizeSeoZoomDb((string) Tools::getValue('seozoom_db'));
+        $seoZoomCacheHours = $repository->normalizeSeoZoomCacheHours((int) Tools::getValue('seozoom_cache_hours'));
 
         if ($siteUrl !== '' && !$this->isValidSiteUrl($siteUrl)) {
-            $this->errors[] = $this->module->trans('Search Console property URL must be a valid absolute URL or sc-domain property.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Search Console property URL must be a valid absolute URL or sc-domain property.', [], 'Modules.Tecsearchconsole.Admin');
+        }
+
+        if ($seoZoomApiKey !== '' && strpos($seoZoomApiKey, '****') !== 0 && preg_match('/^[a-zA-Z0-9._-]{8,255}$/', $seoZoomApiKey) !== 1) {
+            $this->errors[] = $this->trans('SEOZoom API key contains unsupported characters.', [], 'Modules.Tecsearchconsole.Admin');
         }
 
         if (!empty($this->errors)) {
             return;
         }
 
-        (new GscConfigRepository())->saveSettings((int) $this->context->shop->id, $clientId, $clientSecret, $siteUrl);
-        $this->confirmations[] = $this->module->trans('Settings saved.', [], 'Modules.Tecsearchconsole.Admin');
+        $idShop = (int) $this->context->shop->id;
+        $repository->saveSettings($idShop, $clientId, $clientSecret, $siteUrl);
+        $repository->saveSeoZoomSettings($idShop, $seoZoomApiKey, $seoZoomDb, $seoZoomCacheHours);
+        $this->confirmations[] = $this->trans('Settings saved.', [], 'Modules.Tecsearchconsole.Admin');
+    }
+
+    /**
+     * Refresh cached SEOZoom domain metrics.
+     *
+     * @return void
+     */
+    private function refreshSeoZoomDomainMetrics()
+    {
+        $idShop = (int) $this->context->shop->id;
+        $config = (new GscConfigRepository())->getConfig($idShop);
+        $metrics = (new GscSeoZoomService())->getDomainMetrics($idShop, $config, true);
+
+        if (!empty($metrics['error'])) {
+            $this->errors[] = (string) $metrics['error'];
+
+            return;
+        }
+
+        if (empty($metrics['has_data'])) {
+            $this->errors[] = $this->trans('SEOZoom API key and property URL are required before refreshing metrics.', [], 'Modules.Tecsearchconsole.Admin');
+
+            return;
+        }
+
+        $this->confirmations[] = $this->trans('SEOZoom domain metrics refreshed.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -172,7 +210,7 @@ class AdminTecGscController extends ModuleAdminController
         $submittedTag = trim((string) Tools::getValue('verification_tag'));
         $verificationToken = $this->extractVerificationToken($submittedTag);
         if ($submittedTag !== '' && $verificationToken === '') {
-            $this->errors[] = $this->module->trans('Verification tag must be a valid Google Search Console meta tag.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Verification tag must be a valid Google Search Console meta tag.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
@@ -188,7 +226,7 @@ class AdminTecGscController extends ModuleAdminController
             $this->module->registerHook('displayHeader');
         }
 
-        $this->confirmations[] = $this->module->trans('Verification tag saved.', [], 'Modules.Tecsearchconsole.Admin');
+        $this->confirmations[] = $this->trans('Verification tag saved.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -208,7 +246,7 @@ class AdminTecGscController extends ModuleAdminController
         );
 
         if ($dataRetentionMonths === null || $alertRetentionDays === null) {
-            $this->errors[] = $this->module->trans('Retention settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Retention settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
@@ -218,7 +256,7 @@ class AdminTecGscController extends ModuleAdminController
             $dataRetentionMonths,
             $alertRetentionDays
         );
-        $this->confirmations[] = $this->module->trans('Retention settings saved.', [], 'Modules.Tecsearchconsole.Admin');
+        $this->confirmations[] = $this->trans('Retention settings saved.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -251,7 +289,7 @@ class AdminTecGscController extends ModuleAdminController
         try {
             $oauth = new GscOAuthHandler((int) $this->context->shop->id);
             $oauth->revokeAccess();
-            $this->confirmations[] = $this->module->trans('Google account disconnected.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->confirmations[] = $this->trans('Google account disconnected.', [], 'Modules.Tecsearchconsole.Admin');
         } catch (Exception $exception) {
             $this->errors[] = $exception->getMessage();
         }
@@ -269,7 +307,7 @@ class AdminTecGscController extends ModuleAdminController
             $config = (new GscConfigRepository())->getConfig($idShop);
             $siteUrl = isset($config['site_url']) ? (string) $config['site_url'] : '';
             if ($siteUrl === '') {
-                $this->errors[] = $this->module->trans('Search Console property URL is required before synchronization.', [], 'Modules.Tecsearchconsole.Admin');
+                $this->errors[] = $this->trans('Search Console property URL is required before synchronization.', [], 'Modules.Tecsearchconsole.Admin');
 
                 return;
             }
@@ -279,7 +317,7 @@ class AdminTecGscController extends ModuleAdminController
             $processedRows = (new GscDataSync($apiClient, $idShop))->syncRecentDays(30);
             $createdAlerts = (new GscAlertEngine($idShop))->analyzeAndGenerateAlerts();
             $this->confirmations[] = sprintf(
-                $this->module->trans('Synchronization completed: %d rows processed, %d alerts created.', [], 'Modules.Tecsearchconsole.Admin'),
+                $this->trans('Synchronization completed: %d rows processed, %d alerts created.', [], 'Modules.Tecsearchconsole.Admin'),
                 $processedRows,
                 $createdAlerts
             );
@@ -305,7 +343,7 @@ class AdminTecGscController extends ModuleAdminController
             $deletedAlertRows = $retention->cleanupAlerts($idShop, $retentionSettings['alert_retention_days']);
 
             $this->confirmations[] = sprintf(
-                $this->module->trans('Cleanup completed: %d data rows and %d alert rows removed.', [], 'Modules.Tecsearchconsole.Admin'),
+                $this->trans('Cleanup completed: %d data rows and %d alert rows removed.', [], 'Modules.Tecsearchconsole.Admin'),
                 $deletedDataRows,
                 $deletedAlertRows
             );
@@ -327,14 +365,14 @@ class AdminTecGscController extends ModuleAdminController
         $period = $exporter->normalizePeriod((string) Tools::getValue('export_period'));
 
         if ($format === '' || $period === '') {
-            $this->errors[] = $this->module->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
 
         Configuration::updateValue('TEC_GSC_EXPORT_FORMAT', $format, false, null, $idShop);
         Configuration::updateValue('TEC_GSC_EXPORT_PERIOD', $period, false, null, $idShop);
-        $this->confirmations[] = $this->module->trans('Export settings saved.', [], 'Modules.Tecsearchconsole.Admin');
+        $this->confirmations[] = $this->trans('Export settings saved.', [], 'Modules.Tecsearchconsole.Admin');
     }
 
     /**
@@ -362,13 +400,13 @@ class AdminTecGscController extends ModuleAdminController
         }
 
         if ($format === '' || $period === '') {
-            $this->errors[] = $this->module->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Export settings contain an unsupported value.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
 
         if ($idProduct < 0) {
-            $this->errors[] = $this->module->trans('Product export target is invalid.', [], 'Modules.Tecsearchconsole.Admin');
+            $this->errors[] = $this->trans('Product export target is invalid.', [], 'Modules.Tecsearchconsole.Admin');
 
             return;
         }
@@ -435,13 +473,32 @@ class AdminTecGscController extends ModuleAdminController
      */
     private function getTemplateConfig(array $config, GscConfigRepository $repository)
     {
+        $seoZoomDb = isset($config['seozoom_db']) ? (string) $config['seozoom_db'] : 'it';
+        $seoZoomCacheHours = isset($config['seozoom_cache_hours']) ? (int) $config['seozoom_cache_hours'] : 24;
+
         return [
             'client_id' => isset($config['client_id']) ? (string) $config['client_id'] : '',
             'client_secret' => $repository->maskSecret(isset($config['client_secret']) ? (string) $config['client_secret'] : ''),
             'site_url' => isset($config['site_url']) ? (string) $config['site_url'] : '',
             'is_connected' => !empty($config['is_connected']),
             'last_sync' => isset($config['last_sync']) ? (string) $config['last_sync'] : '',
+            'seozoom_api_key' => $repository->maskSecret(isset($config['seozoom_api_key']) ? (string) $config['seozoom_api_key'] : ''),
+            'seozoom_db' => $repository->normalizeSeoZoomDb($seoZoomDb),
+            'seozoom_cache_hours' => $repository->normalizeSeoZoomCacheHours($seoZoomCacheHours),
         ];
+    }
+
+    /**
+     * Load SEOZoom domain metrics for the dashboard.
+     *
+     * @param int $idShop Shop identifier
+     * @param array<string, mixed> $config Configuration row
+     *
+     * @return array<string, mixed> SEOZoom domain metrics
+     */
+    private function getSeoZoomDomainMetrics($idShop, array $config)
+    {
+        return (new GscSeoZoomService())->getDomainMetrics((int) $idShop, $config);
     }
 
     /**
@@ -505,7 +562,11 @@ class AdminTecGscController extends ModuleAdminController
         return [
             'last_28_days' => $this->getSearchConsoleTotals($idShop, $config, $periodStart, $periodEnd),
             'top_pages' => $this->getSearchConsoleTopPages($idShop, $config, $periodStart, $periodEnd),
-            'top_queries' => $this->getSearchConsoleTopQueries($idShop, $config, $periodStart, $periodEnd),
+            'top_queries' => (new GscSeoZoomService())->enrichQueryRowsWithSearchVolume(
+                (int) $idShop,
+                $config,
+                $this->getSearchConsoleTopQueries($idShop, $config, $periodStart, $periodEnd)
+            ),
             'low_ctr_opportunities' => $this->getRows(
                 'SELECT
                     page,

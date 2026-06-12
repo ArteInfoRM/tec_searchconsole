@@ -10,11 +10,50 @@ CREATE TABLE IF NOT EXISTS `PREFIX_tec_gsc_config` (
     `is_connected` TINYINT(1) DEFAULT 0,
     `data_retention_months` INT(10) UNSIGNED NOT NULL DEFAULT 16,
     `alert_retention_days` INT(10) UNSIGNED NOT NULL DEFAULT 180,
+    `seozoom_api_key` VARCHAR(255) NOT NULL DEFAULT '',
+    `seozoom_db` VARCHAR(5) NOT NULL DEFAULT 'it',
+    `seozoom_cache_hours` INT(10) UNSIGNED NOT NULL DEFAULT 24,
     `last_sync` DATETIME DEFAULT NULL,
     `date_add` DATETIME NOT NULL,
     `date_upd` DATETIME NOT NULL,
     PRIMARY KEY (`id_config`),
     UNIQUE KEY `idx_shop` (`id_shop`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_tec_gsc_seozoom_domain_metrics` (
+    `id_metric` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_shop` INT(10) UNSIGNED NOT NULL DEFAULT 1,
+    `db` VARCHAR(5) NOT NULL DEFAULT 'it',
+    `domain` VARCHAR(255) NOT NULL DEFAULT '',
+    `main_domain` VARCHAR(255) NOT NULL DEFAULT '',
+    `zoom_authority` DECIMAL(10,2) DEFAULT NULL,
+    `zoom_trust` DECIMAL(10,2) DEFAULT NULL,
+    `organic_traffic` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `organic_keywords` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `units_used` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `units_remaining` INT(10) UNSIGNED DEFAULT NULL,
+    `raw_payload` MEDIUMTEXT,
+    `date_add` DATETIME NOT NULL,
+    `date_upd` DATETIME NOT NULL,
+    PRIMARY KEY (`id_metric`),
+    UNIQUE KEY `idx_shop_db_domain` (`id_shop`, `db`, `domain`),
+    KEY `idx_date_upd` (`date_upd`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+CREATE TABLE IF NOT EXISTS `PREFIX_tec_gsc_seozoom_keyword_metrics` (
+    `id_metric` INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_shop` INT(10) UNSIGNED NOT NULL DEFAULT 1,
+    `db` VARCHAR(5) NOT NULL DEFAULT 'it',
+    `keyword` VARCHAR(255) NOT NULL DEFAULT '',
+    `search_volume` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `units_used` INT(10) UNSIGNED NOT NULL DEFAULT 0,
+    `units_remaining` INT(10) UNSIGNED DEFAULT NULL,
+    `raw_payload` MEDIUMTEXT,
+    `date_add` DATETIME NOT NULL,
+    `date_upd` DATETIME NOT NULL,
+    PRIMARY KEY (`id_metric`),
+    UNIQUE KEY `idx_shop_db_keyword` (`id_shop`, `db`, `keyword`),
+    KEY `idx_date_upd` (`date_upd`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `PREFIX_tec_gsc_data` (

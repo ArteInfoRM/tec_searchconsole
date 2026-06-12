@@ -21,7 +21,7 @@
         </div>
       {/if}
 
-      <div class="row">
+      <div class="row tec-gsc-dashboard-row">
         <div class="col-md-6 tec-gsc-connection">
           <p class="tec-gsc-section-title">{l s='Connection' d='Modules.Tecsearchconsole.Admin'}</p>
           <p>
@@ -59,10 +59,11 @@
         </div>
 
         <div class="col-md-6 tec-gsc-settings">
+          <p class="tec-gsc-section-title">{l s='Google Search Console settings' d='Modules.Tecsearchconsole.Admin'}</p>
           <div class="form-group">
             <label class="control-label col-lg-4" for="tec-gsc-client-id">{l s='Client ID' d='Modules.Tecsearchconsole.Admin'}</label>
             <div class="col-lg-8">
-              <input id="tec-gsc-client-id" type="text" name="client_id" value="{$gsc_config.client_id|escape:'html':'UTF-8'}" maxlength="255" required>
+              <input id="tec-gsc-client-id" type="text" name="client_id" value="{$gsc_config.client_id|escape:'html':'UTF-8'}" maxlength="255">
             </div>
           </div>
           <div class="form-group">
@@ -75,6 +76,100 @@
             <label class="control-label col-lg-4" for="tec-gsc-site-url">{l s='Property URL' d='Modules.Tecsearchconsole.Admin'}</label>
             <div class="col-lg-8">
               <input id="tec-gsc-site-url" type="text" name="site_url" value="{$gsc_config.site_url|escape:'html':'UTF-8'}" maxlength="255" placeholder="https://example.com/">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row tec-gsc-dashboard-row tec-gsc-dashboard-row-secondary">
+        <div class="col-md-6 tec-gsc-connection">
+          <p class="tec-gsc-section-title">{l s='SEOZoom domain metrics' d='Modules.Tecsearchconsole.Admin'}</p>
+          {if $gsc_seozoom_domain_metrics.enabled && $gsc_seozoom_domain_metrics.domain}
+            {if $gsc_seozoom_domain_metrics.has_data}
+              <table class="table tec-gsc-seozoom-metrics">
+                <tbody>
+                  <tr>
+                    <th>{l s='Zoom Authority' d='Modules.Tecsearchconsole.Admin'}</th>
+                    <td>{$gsc_seozoom_domain_metrics.metrics.zoom_authority|escape:'html':'UTF-8'}</td>
+                  </tr>
+                  <tr>
+                    <th>{l s='Zoom Trust' d='Modules.Tecsearchconsole.Admin'}</th>
+                    <td>{$gsc_seozoom_domain_metrics.metrics.zoom_trust|escape:'html':'UTF-8'}</td>
+                  </tr>
+                  <tr>
+                    <th>{l s='Estimated organic traffic' d='Modules.Tecsearchconsole.Admin'}</th>
+                    <td>{$gsc_seozoom_domain_metrics.metrics.organic_traffic|intval}</td>
+                  </tr>
+                  <tr>
+                    <th>{l s='Organic keywords' d='Modules.Tecsearchconsole.Admin'}</th>
+                    <td>{$gsc_seozoom_domain_metrics.metrics.organic_keywords|intval}</td>
+                  </tr>
+                  <tr>
+                    <th>{l s='Last SEOZoom update' d='Modules.Tecsearchconsole.Admin'}</th>
+                    <td>{$gsc_seozoom_domain_metrics.metrics.date_upd|escape:'html':'UTF-8'}</td>
+                  </tr>
+                </tbody>
+              </table>
+            {else}
+              <p class="text-muted">{l s='No SEOZoom metrics cached yet.' d='Modules.Tecsearchconsole.Admin'}</p>
+            {/if}
+            {if $gsc_seozoom_domain_metrics.error}
+              <p class="text-warning">{$gsc_seozoom_domain_metrics.error|escape:'html':'UTF-8'}</p>
+            {/if}
+            <div class="tec-gsc-actions">
+              <button type="submit" name="submitTecGscRefreshSeoZoom" class="btn btn-default" formnovalidate>
+                <i class="icon-refresh"></i> {l s='Refresh SEOZoom metrics' d='Modules.Tecsearchconsole.Admin'}
+              </button>
+              {if $gsc_seozoom_domain_metrics.seozoom_url}
+                <a class="btn btn-default" href="{$gsc_seozoom_domain_metrics.seozoom_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer">
+                  <i class="icon-external-link"></i> {l s='Open domain in SEOZoom' d='Modules.Tecsearchconsole.Admin'}
+                </a>
+              {/if}
+            </div>
+          {else}
+            <p class="text-muted">{l s='Enter a SEOZoom API key and property URL to show domain metrics.' d='Modules.Tecsearchconsole.Admin'}</p>
+          {/if}
+        </div>
+
+        <div class="col-md-6 tec-gsc-settings">
+          <p class="tec-gsc-section-title">{l s='SEOZoom settings' d='Modules.Tecsearchconsole.Admin'}</p>
+          <div class="form-group">
+            <label class="control-label col-lg-4" for="tec-gsc-seozoom-api-key">{l s='SEOZoom API key' d='Modules.Tecsearchconsole.Admin'}</label>
+            <div class="col-lg-8">
+              <input id="tec-gsc-seozoom-api-key" type="text" name="seozoom_api_key" value="{$gsc_config.seozoom_api_key|escape:'html':'UTF-8'}" maxlength="255" autocomplete="off">
+              <p class="help-block">
+                {l s='The saved key is masked. Leave the mask unchanged to keep the current key.' d='Modules.Tecsearchconsole.Admin'}
+              </p>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-lg-4" for="tec-gsc-seozoom-db">{l s='SEOZoom database' d='Modules.Tecsearchconsole.Admin'}</label>
+            <div class="col-lg-8">
+              <select id="tec-gsc-seozoom-db" name="seozoom_db" class="form-control">
+                <option value="it"{if $gsc_config.seozoom_db == 'it'} selected="selected"{/if}>{l s='Italy' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="es"{if $gsc_config.seozoom_db == 'es'} selected="selected"{/if}>{l s='Spain' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="fr"{if $gsc_config.seozoom_db == 'fr'} selected="selected"{/if}>{l s='France' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="de"{if $gsc_config.seozoom_db == 'de'} selected="selected"{/if}>{l s='Germany' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="uk"{if $gsc_config.seozoom_db == 'uk'} selected="selected"{/if}>{l s='United Kingdom' d='Modules.Tecsearchconsole.Admin'}</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="control-label col-lg-4" for="tec-gsc-seozoom-cache-hours">{l s='SEOZoom cache' d='Modules.Tecsearchconsole.Admin'}</label>
+            <div class="col-lg-8">
+              <select id="tec-gsc-seozoom-cache-hours" name="seozoom_cache_hours" class="form-control">
+                <option value="6"{if $gsc_config.seozoom_cache_hours == 6} selected="selected"{/if}>{l s='6 hours' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="12"{if $gsc_config.seozoom_cache_hours == 12} selected="selected"{/if}>{l s='12 hours' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="24"{if $gsc_config.seozoom_cache_hours == 24} selected="selected"{/if}>{l s='24 hours' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="48"{if $gsc_config.seozoom_cache_hours == 48} selected="selected"{/if}>{l s='48 hours' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="72"{if $gsc_config.seozoom_cache_hours == 72} selected="selected"{/if}>{l s='72 hours' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="168"{if $gsc_config.seozoom_cache_hours == 168} selected="selected"{/if}>{l s='7 days' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="336"{if $gsc_config.seozoom_cache_hours == 336} selected="selected"{/if}>{l s='14 days' d='Modules.Tecsearchconsole.Admin'}</option>
+                <option value="720"{if $gsc_config.seozoom_cache_hours == 720} selected="selected"{/if}>{l s='30 days' d='Modules.Tecsearchconsole.Admin'}</option>
+              </select>
+              <p class="help-block">
+                {l s='Domain metrics cost 20 SEOZoom API units per refresh.' d='Modules.Tecsearchconsole.Admin'}
+              </p>
             </div>
           </div>
         </div>

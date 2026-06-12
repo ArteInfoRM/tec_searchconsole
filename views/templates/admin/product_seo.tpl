@@ -35,6 +35,11 @@
     <a class="btn btn-default" href="{$gsc_export_action|escape:'html':'UTF-8'}&amp;export_gsc_data=1&amp;id_product={$gsc_export_product_id|intval}">
       <i class="icon-download"></i> {l s='Export product data' d='Modules.Tecsearchconsole.Admin'}
     </a>
+    {if $gsc_seozoom_product_url}
+      <a class="btn btn-default" href="{$gsc_seozoom_product_url|escape:'html':'UTF-8'}" target="_blank" rel="noopener noreferrer">
+        <i class="icon-external-link"></i> {l s='Open product in SEOZoom' d='Modules.Tecsearchconsole.Admin'}
+      </a>
+    {/if}
   </p>
 
   <hr>
