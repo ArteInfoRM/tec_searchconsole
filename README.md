@@ -1,5 +1,7 @@
 # Tec Search Console
 
+![Tec Search Console dashboard preview](views/img/dashboard-seo.jpg)
+
 Google Search Console and optional SEOZoom API v2 integration for PrestaShop 8 and 9, developed by Tecnoacquisti.com®.
 
 The module connects a PrestaShop back office to the Google Search Console API, stores SEO metrics locally, and exposes Search Console data where merchants need it most: the module dashboard, the native back-office dashboard, and the product edit page. When configured, SEOZoom API v2 adds cached domain visibility metrics and monthly search volume for dashboard queries.
